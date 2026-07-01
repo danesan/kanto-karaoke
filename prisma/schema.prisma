@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum QueueStatus {
+  PENDING
+  WAITING
+  PLAYING
+  FINISHED
+  SKIPPED
+  REJECTED
+}
+
+enum ParticipantRole {
+  ADMIN
+  GUEST
+}
+
+model KaraokeSession {
+  id                       String      @id @default(cuid())
+  code                     String      @unique
+  name                     String
+  adminPinHash             String?     @map("admin_pin_hash")
+  maxPendingPerParticipant Int         @default(2) @map("max_pending_per_participant")
+  maxWaitingPerParticipant Int         @default(2) @map("max_waiting_per_participant")
+  allowDuplicates          Boolean     @default(false) @map("allow_duplicates")
+  moderationEnabled        Boolean     @default(true) @map("moderation_enabled")
+  closedAt                 DateTime?   @map("closed_at")
+  createdAt                DateTime    @default(now()) @map("created_at")
+  isActive                 Boolean     @default(true) @map("is_active")
+  participants             Participant[]
+  queueItems               QueueItem[]
+
+  @@map("karaoke_sessions")
+}
+
+model Participant {
+  id         String          @id @default(cuid())
+  sessionId  String          @map("session_id")
+  name       String
+  role       ParticipantRole @default(GUEST)
+  createdAt  DateTime        @default(now()) @map("created_at")
+  session    KaraokeSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  queueItems QueueItem[]
+
+  @@index([sessionId])
+  @@index([sessionId, role])
+  @@map("participants")
+}
+
+model Song {
+  id             String        @id @default(cuid())
+  youtubeVideoId String        @unique @map("youtube_video_id")
+  title          String
+  displayTitle   String?       @map("display_title")
+  channel        String
+  thumbnail      String
+  duration       String
+  isFavorite     Boolean       @default(false) @map("is_favorite")
+  isBlocked      Boolean       @default(false) @map("is_blocked")
+  blockedReason  String?       @map("blocked_reason")
+  blockedAt      DateTime?     @map("blocked_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  searchCaches   SearchCache[]
+  queueItems     QueueItem[]
+
+  @@index([title])
+  @@index([channel])
+  @@index([youtubeVideoId])
+  @@index([isBlocked])
+  @@map("songs")
+}
+
+model SearchCache {
+  id                   String   @id @default(cuid())
+  normalizedSearchTerm String   @map("normalized_search_term")
+  songId               String   @map("song_id")
+  resultPosition       Int      @default(0) @map("result_position")
+  createdAt            DateTime @default(now()) @map("created_at")
+  song                 Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@index([normalizedSearchTerm])
+  @@unique([normalizedSearchTerm, songId])
+  @@map("search_cache")
+}
+
+model QueueItem {
+  id                       String         @id @default(cuid())
+  sessionId                String         @map("session_id")
+  songId                   String         @map("song_id")
+  participantId            String         @map("participant_id")
+  addedByParticipantId     String?        @map("added_by_participant_id")
+  position                 Int?
+  status                   QueueStatus    @default(PENDING)
+  rejectionReason          String?        @map("rejection_reason")
+  approvedAt               DateTime?      @map("approved_at")
+  approvedByParticipantId  String?        @map("approved_by_participant_id")
+  rejectedAt               DateTime?      @map("rejected_at")
+  rejectedByParticipantId  String?        @map("rejected_by_participant_id")
+  createdAt                DateTime       @default(now()) @map("created_at")
+  startedAt                DateTime?      @map("started_at")
+  finishedAt               DateTime?      @map("finished_at")
+  session                  KaraokeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  song                     Song           @relation(fields: [songId], references: [id], onDelete: Restrict)
+  participant              Participant    @relation(fields: [participantId], references: [id], onDelete: Restrict)
+
+  @@index([sessionId, position])
+  @@index([sessionId, status])
+  @@index([participantId])
+  @@index([addedByParticipantId])
+  @@index([songId, status])
+  @@map("queue_items")
+}
