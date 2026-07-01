@@ -157,7 +157,10 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
             onMove={(id, direction) => action.mutate({ path: `/api/sessions/${sessionCode}/queue/${id}`, method: "PATCH", body: { direction } })}
             onRemove={(id) => action.mutate({ path: `/api/sessions/${sessionCode}/queue/${id}`, method: "DELETE" })}
             onClear={() => action.mutate({ path: `/api/sessions/${sessionCode}/queue`, method: "DELETE" })}
-            onSkip={() => action.mutate({ path: `/api/sessions/${sessionCode}/queue/next` })}
+            onSkip={() => {
+              const playing = adminQueue.data?.queue.find((item) => item.status === "PLAYING");
+              if (playing) action.mutate({ path: `/api/sessions/${sessionCode}/queue/${playing.id}/skip` });
+            }}
           />
           <PendingQueueList
             items={adminQueue.data?.pending ?? []}

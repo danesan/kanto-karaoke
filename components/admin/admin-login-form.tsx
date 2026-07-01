@@ -26,7 +26,7 @@ export function AdminLoginForm({ sessionCode }: { sessionCode: string }) {
     setIsLoading(false);
 
     if (!response.ok) {
-      setError("PIN inv?lido para esta sess?o.");
+      setError("PIN inválido para esta sessão.");
       return;
     }
 

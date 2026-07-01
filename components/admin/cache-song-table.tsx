@@ -9,7 +9,7 @@ export function CacheSongTable({ songs, onEdit, onFavorite, onBlock, onTerms }: 
       <table className="w-full min-w-[980px] text-left text-sm">
         <thead className="border-b bg-muted/50 text-xs uppercase tracking-wide text-muted-foreground">
           <tr>
-            <th className="p-3">Thumb</th><th className="p-3">T?tulo original</th><th className="p-3">T?tulo exibido</th><th className="p-3">Canal</th><th className="p-3">YouTube ID</th><th className="p-3">Status</th><th className="p-3">Datas</th><th className="p-3">A??es</th>
+            <th className="p-3">Thumb</th><th className="p-3">Título original</th><th className="p-3">Título exibido</th><th className="p-3">Canal</th><th className="p-3">YouTube ID</th><th className="p-3">Status</th><th className="p-3">Datas</th><th className="p-3">Ações</th>
           </tr>
         </thead>
         <tbody className="divide-y">
@@ -27,7 +27,7 @@ export function CacheSongTable({ songs, onEdit, onFavorite, onBlock, onTerms }: 
           ))}
         </tbody>
       </table>
-      {songs.length === 0 ? <p className="p-4 text-sm text-muted-foreground">Nenhuma m?sica encontrada.</p> : null}
+      {songs.length === 0 ? <p className="p-4 text-sm text-muted-foreground">Nenhuma música encontrada.</p> : null}
     </div>
   );
 }

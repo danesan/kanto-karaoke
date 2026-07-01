@@ -42,14 +42,14 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
     <main className="mx-auto min-h-screen w-full max-w-7xl space-y-5 px-4 py-5">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-primary">Admin ? Cache</p>
-          <h1 className="text-2xl font-bold">M?sicas salvas</h1>
+          <p className="text-sm font-semibold uppercase tracking-wide text-primary">Admin - Cache</p>
+          <h1 className="text-2xl font-bold">Músicas salvas</h1>
         </div>
         <Button asChild variant="outline"><Link href={`/admin/${sessionCode}`}><ArrowLeft className="h-4 w-4" />Dashboard</Link></Button>
       </header>
 
       <section className="flex flex-col gap-3 rounded-lg border bg-white p-4 shadow-sm sm:flex-row">
-        <label className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" /><Input className="pl-9" placeholder="Buscar por t?tulo, canal ou ID" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+        <label className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" /><Input className="pl-9" placeholder="Buscar por título, canal ou ID" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
         <Button variant="outline" onClick={() => action.mutate({ path: "/api/songs/cache/old", method: "DELETE", body: { days: 30 } })}><Trash2 className="h-4 w-4" />Limpar antigos</Button>
       </section>
 
@@ -61,7 +61,7 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
         onTerms={setTerms}
       />
 
-      <Dialog open={Boolean(editing)} title="Editar t?tulo exibido" onClose={() => setEditing(null)}>
+      <Dialog open={Boolean(editing)} title="Editar título exibido" onClose={() => setEditing(null)}>
         <div className="space-y-4">
           <Input value={displayTitle} onChange={(event) => setDisplayTitle(event.target.value)} />
           <div className="flex justify-end gap-2"><Button variant="ghost" onClick={() => setEditing(null)}>Cancelar</Button><Button onClick={() => { if (editing) action.mutate({ path: `/api/songs/${editing.id}`, method: "PATCH", body: { displayTitle } }); setEditing(null); }}>Salvar</Button></div>
