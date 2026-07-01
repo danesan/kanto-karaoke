@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { setAdminCookie } from "@/lib/admin-auth";
 import { SessionService } from "@/services/session.service";
 
 const createSessionSchema = z.object({
-  name: z.string().trim().min(2).max(80)
+  name: z.string().trim().min(2).max(80),
+  adminPin: z.string().trim().min(4).max(12).optional()
 });
 
 export async function GET() {
@@ -22,7 +24,8 @@ export async function POST(request: Request) {
   }
 
   const service = new SessionService();
-  const session = await service.create(parsed.data.name);
+  const session = await service.create(parsed.data.name, parsed.data.adminPin);
+  await setAdminCookie(session.session.code);
 
-  return NextResponse.json({ session }, { status: 201 });
+  return NextResponse.json(session, { status: 201 });
 }

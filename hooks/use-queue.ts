@@ -31,11 +31,12 @@ export function useQueue(sessionId: string) {
   });
 }
 
-export function useGuestQueue(sessionCode: string) {
+export function useGuestQueue(sessionCode: string, participantId?: string) {
   return useQuery({
-    queryKey: guestQueueKey(sessionCode),
+    queryKey: [...guestQueueKey(sessionCode), participantId],
     queryFn: async () => {
-      const response = await fetch(`/api/guest/${sessionCode}/queue`);
+      const suffix = participantId ? `?participantId=${participantId}` : "";
+      const response = await fetch(`/api/guest/${sessionCode}/queue${suffix}`);
 
       if (!response.ok) {
         throw new Error("Queue load failed");

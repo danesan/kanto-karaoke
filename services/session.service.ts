@@ -53,6 +53,11 @@ export class SessionService {
     return sessions.map(toSessionDTO);
   }
 
+  async listInactive() {
+    const sessions = await this.sessions.listInactive();
+    return sessions.map(toSessionDTO);
+  }
+
   async validateAdminPin(sessionCode: string, pin: string) {
     const session = await this.sessions.findActiveByCode(sessionCode);
 
@@ -89,5 +94,15 @@ export class SessionService {
     }
 
     return toSessionDTO(await this.sessions.close(session.id));
+  }
+
+  async deleteInactive(sessionId: string) {
+    const result = await this.sessions.deleteInactive(sessionId);
+
+    if (result.count === 0) {
+      throw new Error("Inactive session not found");
+    }
+
+    return result;
   }
 }

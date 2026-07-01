@@ -56,7 +56,7 @@ export function ControlScreen({ sessionId }: { sessionId: string }) {
         <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-primary">Controle</p>
-            <h1 className="text-2xl font-bold">{session.data?.name ?? `Sessao ${sessionId}`}</h1>
+            <h1 className="text-2xl font-bold">{session.data?.name ?? `Sessão ${sessionId}`}</h1>
             {session.data?.code ? <p className="text-sm font-semibold text-primary">Código {session.data.code}</p> : null}
           </div>
           <Button asChild variant="outline">

@@ -25,6 +25,12 @@ export class QueueService {
     return items.map(toQueueItemDTO);
   }
 
+  async listBySessionKey(sessionKey: string) {
+    const session = await this.ensureSessionByKey(sessionKey);
+    const items = await this.queue.list(session.id);
+    return items.map(toQueueItemDTO);
+  }
+
   async listGuestBySessionCode(sessionCode: string, participantId: string) {
     const session = await this.ensureSessionByCode(sessionCode);
     const items = await this.queue.listGuest(session.id, participantId);
@@ -52,6 +58,16 @@ export class QueueService {
 
     const item = await this.queue.add(sessionId, songId, singerName.trim(), QueueStatus.WAITING);
     await this.startFirstSongIfNeeded(sessionId);
+
+    return toQueueItemDTO(item);
+  }
+
+  async addBySessionKey(sessionKey: string, songId: string, singerName: string) {
+    const session = await this.ensureSessionByKey(sessionKey);
+    await this.ensureSongCanBeQueued(session.id, songId, session.allowDuplicates);
+
+    const item = await this.queue.add(session.id, songId, singerName.trim(), QueueStatus.WAITING);
+    await this.startFirstSongIfNeeded(session.id);
 
     return toQueueItemDTO(item);
   }
@@ -126,6 +142,11 @@ export class QueueService {
     return this.queue.clear(session.id);
   }
 
+  async clearBySessionKey(sessionKey: string) {
+    const session = await this.ensureSessionByKey(sessionKey);
+    return this.queue.clear(session.id);
+  }
+
   async move(queueItemId: string, direction: "up" | "down") {
     const item = await this.queue.move(queueItemId, direction);
     return item ? toQueueItemDTO(item) : null;
@@ -144,6 +165,12 @@ export class QueueService {
 
   async skipByCode(sessionCode: string) {
     const session = await this.ensureSessionByCode(sessionCode);
+    const item = await this.queue.startNext(session.id);
+    return item ? toQueueItemDTO(item) : null;
+  }
+
+  async nextBySessionKey(sessionKey: string) {
+    const session = await this.ensureSessionByKey(sessionKey);
     const item = await this.queue.startNext(session.id);
     return item ? toQueueItemDTO(item) : null;
   }
@@ -195,6 +222,18 @@ export class QueueService {
     if (!hasPlaying) {
       await this.queue.startNext(sessionId);
     }
+  }
+
+  private async ensureSessionByKey(sessionKey: string) {
+    const session =
+      (await this.sessions.findActiveById(sessionKey)) ??
+      (await this.sessions.findActiveByCode(sessionKey));
+
+    if (!session) {
+      throw new Error("Session not found");
+    }
+
+    return session;
   }
 
   private async ensureSession(sessionId: string) {

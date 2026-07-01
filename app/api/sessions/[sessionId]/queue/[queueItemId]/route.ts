@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAdmin } from "@/lib/admin-auth";
 import { QueueService } from "@/services/queue.service";
 
 type Params = {
   params: Promise<{
+    sessionId: string;
     queueItemId: string;
   }>;
 };
@@ -13,7 +15,8 @@ const moveSchema = z.object({
 });
 
 export async function PATCH(request: Request, { params }: Params) {
-  const { queueItemId } = await params;
+  const { sessionId, queueItemId } = await params;
+  await requireAdmin(sessionId);
   const body = await request.json();
   const parsed = moveSchema.safeParse(body);
 
@@ -28,7 +31,8 @@ export async function PATCH(request: Request, { params }: Params) {
 }
 
 export async function DELETE(_request: Request, { params }: Params) {
-  const { queueItemId } = await params;
+  const { sessionId, queueItemId } = await params;
+  await requireAdmin(sessionId);
   const service = new QueueService();
   const item = await service.remove(queueItemId);
 

@@ -34,6 +34,14 @@ export class SessionRepository {
     });
   }
 
+  listInactive() {
+    return this.db.karaokeSession.findMany({
+      where: { OR: [{ isActive: false }, { closedAt: { not: null } }] },
+      orderBy: [{ closedAt: "desc" }, { createdAt: "desc" }],
+      take: 20
+    });
+  }
+
   updateSettings(
     id: string,
     data: {
@@ -50,6 +58,12 @@ export class SessionRepository {
     return this.db.karaokeSession.update({
       where: { id },
       data: { isActive: false, closedAt: new Date() }
+    });
+  }
+
+  deleteInactive(id: string) {
+    return this.db.karaokeSession.deleteMany({
+      where: { id, OR: [{ isActive: false }, { closedAt: { not: null } }] }
     });
   }
 }

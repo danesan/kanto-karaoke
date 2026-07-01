@@ -18,11 +18,11 @@ export function GuestQueue({
   return (
     <section className="rounded-lg border bg-white shadow-sm">
       <div className="border-b p-4">
-        <h2 className="text-lg font-semibold">Fila da sessao</h2>
+        <h2 className="text-lg font-semibold">Fila da sessão</h2>
       </div>
       {isLoading ? <p className="p-4 text-sm text-muted-foreground">Carregando fila...</p> : null}
       {!isLoading && items.length === 0 ? (
-        <p className="p-4 text-sm text-muted-foreground">Aguardando novas musicas...</p>
+        <p className="p-4 text-sm text-muted-foreground">Aguardando novas músicas...</p>
       ) : null}
       <div className="divide-y">
         {items.map((item) => {

@@ -18,13 +18,14 @@ export function SessionHome() {
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const result = await createSession.mutateAsync(sessionName);
-    router.push(`/session/${result.session.id}/control`);
+    window.sessionStorage.setItem(`kanto_admin_pin_${result.session.code}`, result.adminPin);
+    router.push(`/admin/${result.session.code}`);
   }
 
   function handleJoin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (joinId.trim()) {
-      router.push(`/session/${joinId.trim()}/control`);
+      router.push(`/admin/${joinId.trim().toUpperCase()}/login`);
     }
   }
 
@@ -61,7 +62,7 @@ export function SessionHome() {
           <h2 className="mb-4 text-xl font-semibold">Entrar como administrador</h2>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Input
-              placeholder="ID da sessao"
+              placeholder="Codigo da sessão"
               value={joinId}
               onChange={(event) => setJoinId(event.target.value)}
             />
@@ -84,7 +85,7 @@ export function SessionHome() {
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button asChild size="sm">
-                  <Link href={`/session/${session.id}/control`}>Controle</Link>
+                  <Link href={`/admin/${session.code}/login`}>Admin</Link>
                 </Button>
                 <Button asChild size="sm" variant="outline">
                   <Link href={`/player/${session.code}`}>Player</Link>

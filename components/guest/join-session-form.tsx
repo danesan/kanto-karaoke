@@ -49,7 +49,7 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
       );
       router.push(`/guest/${sessionCode}`);
     } catch {
-      setError("Nao foi possivel entrar nessa sessao.");
+      setError("Nao foi possivel entrar nessa sessão.");
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +59,7 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
     <form onSubmit={handleSubmit} className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-4">
       <div className="rounded-lg border bg-white p-5 shadow-sm">
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Kanto</p>
-        <h1 className="mt-2 text-2xl font-bold">Entrar na sessao {sessionCode}</h1>
+        <h1 className="mt-2 text-2xl font-bold">Entrar na sessão {sessionCode}</h1>
         <label className="mt-5 block space-y-2">
           <span className="text-sm font-medium">Seu nome</span>
           <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="Daniel" autoFocus />

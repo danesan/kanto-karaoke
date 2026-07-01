@@ -14,11 +14,18 @@ type Params = {
   }>;
 };
 
-export async function GET(_request: Request, { params }: Params) {
+export async function GET(request: Request, { params }: Params) {
   const { sessionCode } = await params;
+  const url = new URL(request.url);
+  const participantId = url.searchParams.get("participantId");
   const service = new QueueService();
-  const queue = await service.listBySessionCode(sessionCode);
 
+  if (participantId) {
+    const queue = await service.listGuestBySessionCode(sessionCode, participantId);
+    return NextResponse.json({ queue });
+  }
+
+  const queue = await service.listBySessionCode(sessionCode);
   return NextResponse.json({ queue });
 }
 

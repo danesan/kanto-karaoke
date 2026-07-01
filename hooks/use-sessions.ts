@@ -33,7 +33,7 @@ export function useSession(sessionId: string) {
         throw new Error("Could not load session");
       }
 
-      return (await response.json()) as { session: SessionDTO };
+      return (await response.json()) as { session: SessionDTO; adminPin: string };
     },
     select: (data) => data.session
   });
@@ -49,7 +49,7 @@ export function useSessionByCode(sessionCode: string) {
         throw new Error("Could not load session");
       }
 
-      return (await response.json()) as { session: SessionDTO };
+      return (await response.json()) as { session: SessionDTO; adminPin: string };
     },
     select: (data) => data.session
   });
@@ -59,18 +59,19 @@ export function useCreateSession() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (name: string) => {
+    mutationFn: async (input: string | { name: string; adminPin?: string }) => {
+      const body = typeof input === "string" ? { name: input } : input;
       const response = await fetch("/api/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name })
+        body: JSON.stringify(body)
       });
 
       if (!response.ok) {
         throw new Error("Could not create session");
       }
 
-      return (await response.json()) as { session: SessionDTO };
+      return (await response.json()) as { session: SessionDTO; adminPin: string };
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["sessions"] });

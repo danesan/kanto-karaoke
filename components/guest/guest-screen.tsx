@@ -15,9 +15,9 @@ import type { ParticipantDTO } from "@/types/karaoke";
 export function GuestScreen({ sessionCode }: { sessionCode: string }) {
   const router = useRouter();
   const session = useSessionByCode(sessionCode);
-  const queue = useGuestQueue(sessionCode);
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
   const participantId = participant?.id ?? "";
+  const queue = useGuestQueue(sessionCode, participantId || undefined);
   const mutations = useGuestQueueMutations(sessionCode, participantId);
 
   useQueueRealtime(session.data?.id ?? "", sessionCode);
@@ -38,7 +38,7 @@ export function GuestScreen({ sessionCode }: { sessionCode: string }) {
     }
   }, [router, sessionCode]);
 
-  const title = useMemo(() => session.data?.name ?? `Sessao ${sessionCode}`, [session.data?.name, sessionCode]);
+  const title = useMemo(() => session.data?.name ?? `Sessão ${sessionCode}`, [session.data?.name, sessionCode]);
 
   if (!participant) {
     return <main className="grid min-h-screen place-items-center p-4 text-sm text-muted-foreground">Carregando...</main>;
