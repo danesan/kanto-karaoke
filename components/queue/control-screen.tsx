@@ -17,12 +17,16 @@ import type { SearchResultDTO } from "@/types/karaoke";
 export function ControlScreen({ sessionId }: { sessionId: string }) {
   const [term, setTerm] = useState("");
   const [submittedTerm, setSubmittedTerm] = useState("");
-  const [selectedSong, setSelectedSong] = useState<SearchResultDTO | null>(null);
+  const [selectedSong, setSelectedSong] = useState<SearchResultDTO | null>(
+    null
+  );
   const session = useSession(sessionId);
   const search = useSearchSongs(submittedTerm);
   const queue = useQueue(sessionId);
   const mutations = useQueueMutations(sessionId);
-  const playerHref = session.data?.code ? `/player/${session.data.code}` : `/session/${sessionId}/player`;
+  const playerHref = session.data?.code
+    ? `/player/${session.data.code}`
+    : `/session/${sessionId}/player`;
 
   useQueueRealtime(sessionId, session.data?.code);
 
@@ -51,13 +55,19 @@ export function ControlScreen({ sessionId }: { sessionId: string }) {
   }
 
   return (
-    <main className="mx-auto grid min-h-screen w-full max-w-7xl gap-5 px-4 py-5 lg:grid-cols-[minmax(0,1fr)_420px]">
+    <main className="mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_420px]">
       <section className="space-y-4">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-primary">Controle</p>
-            <h1 className="text-2xl font-bold">{session.data?.name ?? `Sessão ${sessionId}`}</h1>
-            {session.data?.code ? <p className="text-sm font-semibold text-primary">Código {session.data.code}</p> : null}
+            <p className="kanto-eyebrow">Controle</p>
+            <h1 className="mt-1 text-3xl font-black tracking-tight">
+              {session.data?.name ?? `Sessão ${sessionId}`}
+            </h1>
+            {session.data?.code ? (
+              <p className="text-sm font-bold text-secondary">
+                Código {session.data.code}
+              </p>
+            ) : null}
           </div>
           <Button asChild variant="outline">
             <Link href={playerHref} target="_blank">
@@ -72,18 +82,28 @@ export function ControlScreen({ sessionId }: { sessionId: string }) {
           onChange={setTerm}
           onSubmit={submitSearch}
         />
-        <SearchResults songs={search.songs} isLoading={search.isFetching} onAdd={setSelectedSong} />
+        <SearchResults
+          songs={search.songs}
+          isLoading={search.isFetching}
+          onAdd={setSelectedSong}
+        />
       </section>
 
       <Queue
         items={queue.data ?? []}
         isLoading={queue.isLoading}
-        onMove={(queueItemId, direction) => mutations.move.mutate({ queueItemId, direction })}
+        onMove={(queueItemId, direction) =>
+          mutations.move.mutate({ queueItemId, direction })
+        }
         onRemove={(queueItemId) => mutations.remove.mutate(queueItemId)}
         onClear={() => mutations.clear.mutate()}
       />
 
-      <ParticipantDialog song={selectedSong} onClose={() => setSelectedSong(null)} onSubmit={addSong} />
+      <ParticipantDialog
+        song={selectedSong}
+        onClose={() => setSelectedSong(null)}
+        onSubmit={addSong}
+      />
     </main>
   );
 }

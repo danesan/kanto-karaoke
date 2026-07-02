@@ -30,14 +30,19 @@ export function PlayerScreen({
   );
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-6 py-8">
       {sessionCode ? <SessionQRCode sessionCode={sessionCode} /> : null}
       <CurrentSong item={current} />
-      <section className="aspect-video w-full overflow-hidden rounded-lg border bg-black shadow-sm">
+      <section className="aspect-video w-full overflow-hidden rounded-2xl border bg-black shadow-[0_24px_60px_rgba(10,17,40,0.18)]">
         {current ? (
-          <YouTubePlayer videoId={current.song.youtubeVideoId} onEnded={() => mutations.next.mutate()} />
+          <YouTubePlayer
+            videoId={current.song.youtubeVideoId}
+            onEnded={() => mutations.next.mutate()}
+          />
         ) : (
-          <div className="grid h-full place-items-center text-white">Aguardando novas músicas...</div>
+          <div className="grid h-full place-items-center text-white">
+            Aguardando novas músicas...
+          </div>
         )}
       </section>
       <NextSongs items={nextSongs} />

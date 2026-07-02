@@ -38,20 +38,29 @@ export function GuestScreen({ sessionCode }: { sessionCode: string }) {
     }
   }, [router, sessionCode]);
 
-  const title = useMemo(() => session.data?.name ?? `Sessão ${sessionCode}`, [session.data?.name, sessionCode]);
+  const title = useMemo(
+    () => session.data?.name ?? `Sessão ${sessionCode}`,
+    [session.data?.name, sessionCode]
+  );
 
   if (!participant) {
-    return <main className="grid min-h-screen place-items-center p-4 text-sm text-muted-foreground">Carregando...</main>;
+    return (
+      <main className="grid min-h-screen place-items-center p-4 text-sm text-muted-foreground">
+        Carregando...
+      </main>
+    );
   }
 
   return (
-    <main className="mx-auto grid min-h-screen w-full max-w-7xl gap-5 px-4 py-5 lg:grid-cols-[minmax(0,1fr)_420px]">
+    <main className="mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_420px]">
       <section className="space-y-4">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-primary">Convidado</p>
-            <h1 className="text-2xl font-bold">{title}</h1>
-            <p className="text-sm text-muted-foreground">Entrou como {participant.name}</p>
+            <p className="kanto-eyebrow">Convidado</p>
+            <h1 className="mt-1 text-3xl font-black tracking-tight">{title}</h1>
+            <p className="text-sm text-muted-foreground">
+              Entrou como {participant.name}
+            </p>
           </div>
           <Button asChild variant="outline">
             <Link href={`/join/${sessionCode}`}>Trocar nome</Link>
@@ -60,7 +69,9 @@ export function GuestScreen({ sessionCode }: { sessionCode: string }) {
         <GuestSearch
           defaultSingerName={participant.name}
           isAdding={mutations.add.isPending}
-          onAdd={(songId, singerName) => mutations.add.mutate({ songId, singerName })}
+          onAdd={(songId, singerName) =>
+            mutations.add.mutate({ songId, singerName })
+          }
         />
       </section>
 

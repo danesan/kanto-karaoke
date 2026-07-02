@@ -19,20 +19,29 @@ export function Queue({
   onClear: () => void;
 }) {
   return (
-    <section className="rounded-lg border bg-white shadow-sm">
-      <div className="flex items-center justify-between gap-3 border-b p-4">
+    <section className="kanto-card">
+      <div className="kanto-card-header">
         <div className="flex items-center gap-2">
           <ListMusic className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold">Fila</h2>
+          <h2 className="text-lg font-bold">Fila</h2>
         </div>
-        <Button size="sm" variant="outline" onClick={onClear} disabled={items.length === 0}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onClear}
+          disabled={items.length === 0}
+        >
           <Trash2 className="h-4 w-4" />
           Limpar
         </Button>
       </div>
-      {isLoading ? <p className="p-4 text-sm text-muted-foreground">Carregando fila...</p> : null}
+      {isLoading ? (
+        <p className="p-4 text-sm text-muted-foreground">Carregando fila...</p>
+      ) : null}
       {!isLoading && items.length === 0 ? (
-        <p className="p-4 text-sm text-muted-foreground">Aguardando novas músicas...</p>
+        <p className="p-4 text-sm text-muted-foreground">
+          Aguardando novas músicas...
+        </p>
       ) : null}
       {items.map((item) => (
         <QueueItem

@@ -56,16 +56,31 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-4">
-      <div className="rounded-lg border bg-white p-5 shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-wide text-primary">Kanto</p>
-        <h1 className="mt-2 text-2xl font-bold">Entrar na sessão {sessionCode}</h1>
+    <form
+      onSubmit={handleSubmit}
+      className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-5"
+    >
+      <div className="kanto-card kanto-neon-panel p-6">
+        <p className="kanto-eyebrow">Kanto</p>
+        <h1 className="mt-2 text-3xl font-black">
+          Entrar na sessão {sessionCode}
+        </h1>
         <label className="mt-5 block space-y-2">
           <span className="text-sm font-medium">Seu nome</span>
-          <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="Daniel" autoFocus />
+          <Input
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Daniel"
+            autoFocus
+          />
         </label>
-        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
-        <Button className="mt-4 w-full" disabled={isLoading || name.trim().length === 0}>
+        {error ? (
+          <p className="mt-3 text-sm text-destructive">{error}</p>
+        ) : null}
+        <Button
+          className="mt-4 w-full"
+          disabled={isLoading || name.trim().length === 0}
+        >
           Entrar
         </Button>
       </div>

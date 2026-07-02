@@ -35,16 +35,30 @@ export function AdminLoginForm({ sessionCode }: { sessionCode: string }) {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-lg border bg-white p-5 shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-wide text-primary">Admin</p>
-        <h1 className="mt-1 text-2xl font-bold">Sessão {sessionCode}</h1>
+    <main className="grid min-h-screen place-items-center px-5">
+      <form
+        onSubmit={handleSubmit}
+        className="kanto-card kanto-neon-panel w-full max-w-sm p-6"
+      >
+        <p className="kanto-eyebrow">Admin</p>
+        <h1 className="mt-1 text-3xl font-black">Sessão {sessionCode}</h1>
         <label className="mt-5 block space-y-2">
           <span className="text-sm font-semibold">PIN</span>
-          <Input value={pin} onChange={(event) => setPin(event.target.value)} type="password" inputMode="numeric" autoFocus />
+          <Input
+            value={pin}
+            onChange={(event) => setPin(event.target.value)}
+            type="password"
+            inputMode="numeric"
+            autoFocus
+          />
         </label>
-        {error ? <p className="mt-3 text-sm font-semibold text-destructive">{error}</p> : null}
-        <Button className="mt-5 w-full" disabled={isLoading || pin.trim().length < 4}>
+        {error ? (
+          <p className="mt-3 text-sm font-semibold text-destructive">{error}</p>
+        ) : null}
+        <Button
+          className="mt-5 w-full"
+          disabled={isLoading || pin.trim().length < 4}
+        >
           <LogIn className="h-4 w-4" />
           Entrar
         </Button>

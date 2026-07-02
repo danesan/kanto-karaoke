@@ -3,34 +3,80 @@
 @tailwind utilities;
 
 :root {
-  --background: 40 20% 97%;
-  --foreground: 220 18% 12%;
-  --card: 0 0% 100%;
-  --card-foreground: 220 18% 12%;
-  --primary: 173 58% 27%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 28 82% 55%;
-  --secondary-foreground: 220 18% 12%;
-  --muted: 210 16% 92%;
-  --muted-foreground: 215 12% 42%;
-  --destructive: 2 72% 48%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 214 16% 84%;
-  --input: 214 16% 84%;
-  --ring: 173 58% 27%;
+  --bg-main: #f0f4f8;
+  --bg-card: #ffffff;
+  --primary: #00d2ff;
+  --secondary: #0066ff;
+  --text-main: #0a1128;
+  --text-muted: #657795;
+  --border: #e1e8f0;
+  --bg-main-rgb: 240 244 248;
+  --bg-card-rgb: 255 255 255;
+  --primary-rgb: 0 210 255;
+  --secondary-rgb: 0 102 255;
+  --text-main-rgb: 10 17 40;
+  --text-muted-rgb: 101 119 149;
+  --border-rgb: 225 232 240;
+  --background: var(--bg-main);
+  --foreground: var(--text-main);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-main);
+  --primary-foreground: #ffffff;
+  --secondary-foreground: #ffffff;
+  --muted: #eaf0f6;
+  --muted-foreground: var(--text-muted);
+  --destructive: #df1c1c;
+  --destructive-foreground: #ffffff;
+  --input: var(--border);
+  --ring: var(--primary);
+  --shadow-soft: 0 14px 40px rgba(10, 17, 40, 0.06);
+  --shadow-neon: 0 14px 30px rgba(0, 102, 255, 0.18);
 }
 
 * {
-  border-color: hsl(var(--border));
+  border-color: var(--border);
 }
 
 body {
   min-height: 100vh;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(0, 210, 255, 0.16),
+      transparent 34rem
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(0, 102, 255, 0.12),
+      transparent 30rem
+    ),
+    var(--bg-main);
+  color: var(--text-main);
 }
 
 button,
 input {
   font: inherit;
+}
+
+@layer components {
+  .kanto-card {
+    @apply rounded-2xl border bg-card shadow-[var(--shadow-soft)];
+  }
+
+  .kanto-card-header {
+    @apply flex items-center justify-between gap-3 border-b px-5 py-4;
+  }
+
+  .kanto-eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.16em] text-primary;
+  }
+
+  .kanto-gradient-text {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  .kanto-neon-panel {
+    @apply border-primary/25 bg-gradient-to-br from-primary/10 to-secondary/10 shadow-[var(--shadow-neon)];
+  }
 }

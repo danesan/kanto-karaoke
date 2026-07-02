@@ -34,10 +34,21 @@ export function GuestSearch({
   }
 
   return (
-    <section className="space-y-3">
-      <SearchBar value={term} isLoading={search.isFetching} onChange={setTerm} onSubmit={submitSearch} />
-      {search.isFetching ? <p className="text-sm text-muted-foreground">Pesquisando...</p> : null}
-      {!submittedTerm ? <p className="text-sm text-muted-foreground">Busque uma musica para adicionar na fila.</p> : null}
+    <section className="space-y-4">
+      <SearchBar
+        value={term}
+        isLoading={search.isFetching}
+        onChange={setTerm}
+        onSubmit={submitSearch}
+      />
+      {search.isFetching ? (
+        <p className="text-sm text-muted-foreground">Pesquisando...</p>
+      ) : null}
+      {!submittedTerm ? (
+        <p className="text-sm text-muted-foreground">
+          Busque uma música para adicionar na fila.
+        </p>
+      ) : null}
       <div className="grid gap-3">
         {search.songs.map((song) => (
           <GuestSongCard

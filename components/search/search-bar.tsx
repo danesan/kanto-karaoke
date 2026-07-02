@@ -17,7 +17,7 @@ export function SearchBar({
 }) {
   return (
     <form
-      className="grid gap-2 sm:grid-cols-[1fr_auto]"
+      className="grid gap-3 sm:grid-cols-[1fr_auto]"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
@@ -26,7 +26,7 @@ export function SearchBar({
       <label className="relative block">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
-          className="pl-10"
+          className="pl-11"
           placeholder="Buscar música no YouTube"
           value={value}
           onChange={(event) => onChange(event.target.value)}
