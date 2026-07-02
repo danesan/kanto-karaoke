@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,6 +29,14 @@ type AdminQueueResponse = {
 
 type InactiveSessionsResponse = { sessions: SessionDTO[] };
 
+function countdownRemainingSeconds(session?: SessionDTO) {
+  if (!session?.countdownEndsAt) {
+    return 0;
+  }
+
+  return Math.max(0, Math.ceil((new Date(session.countdownEndsAt).getTime() - Date.now()) / 1000));
+}
+
 export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -49,7 +57,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
     queryKey: ["session-code", sessionCode],
     queryFn: async () => {
       const response = await fetch(`/api/sessions/code/${sessionCode}`);
-      if (!response.ok) throw new Error("N?o foi poss?vel carregar a sess?o");
+      if (!response.ok) throw new Error("Nao foi possivel carregar a sessÃ£o");
       return ((await response.json()) as { session: SessionDTO }).session;
     }
   });
@@ -61,7 +69,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
         `/api/sessions/${sessionCode}/queue?admin=1`
       );
       if (!response.ok)
-        throw new Error("N?o foi poss?vel carregar a fila do administrador");
+        throw new Error("Nao foi possivel carregar a fila do administrador");
       return (await response.json()) as AdminQueueResponse;
     }
   });
@@ -73,7 +81,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
         `/api/admin/sessions/inactive?sessionCode=${sessionCode}`
       );
       if (!response.ok)
-        throw new Error("N?o foi poss?vel carregar sess?es encerradas");
+        throw new Error("Nao foi possivel carregar sessoes encerradas");
       return ((await response.json()) as InactiveSessionsResponse).sessions;
     }
   });
@@ -132,6 +140,9 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
     }
   });
 
+  const adminSession = session.data;
+  const countdownSession = adminSession?.playerMode === "COUNTDOWN" ? adminSession : null;
+
   async function logout() {
     await fetch("/api/admin/logout", {
       method: "POST",
@@ -144,16 +155,16 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-7xl space-y-6 px-5 py-8">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <header className="kanto-topbar -mx-5 flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="flex items-center gap-2 kanto-eyebrow">
             <ShieldCheck className="h-4 w-4" />
             Admin
           </p>
           <h1 className="mt-1 text-3xl font-black tracking-tight">
-            {session.data?.name ?? `Sessão ${sessionCode}`}
+            {session.data?.name ?? `SessÃ£o ${sessionCode}`}
           </h1>
-          <p className="text-sm font-bold text-secondary">
+          <p className="text-sm font-bold text-primary">
             Código {sessionCode}
           </p>
         </div>
@@ -174,7 +185,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
       </header>
 
       {createdPin ? (
-        <section className="kanto-card kanto-neon-panel p-5">
+        <section className="kanto-card kanto-accent-panel p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="kanto-eyebrow">PIN administrativo desta sessão</p>
@@ -252,9 +263,69 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
         </div>
 
         <aside className="space-y-6">
-          {session.data ? (
+          {countdownSession ? (
+            <section className="kanto-card p-5">
+              <p className="kanto-eyebrow">Modo Evento</p>
+              <h2 className="mt-1 text-lg font-bold">Countdown ativo</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Restam aproximadamente {countdownRemainingSeconds(countdownSession)} segundos.
+              </p>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    action.mutate({
+                      path: "/api/player/cancel-countdown",
+                      body: { sessionId: countdownSession.id }
+                    })
+                  }
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={() =>
+                    action.mutate({
+                      path: "/api/player/start-next",
+                      body: { sessionId: countdownSession.id }
+                    })
+                  }
+                >
+                  Pular agora
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    action.mutate({
+                      path: "/api/player/start-countdown",
+                      body: {
+                        sessionId: countdownSession.id,
+                        seconds: countdownRemainingSeconds(countdownSession) + 5
+                      }
+                    })
+                  }
+                >
+                  +5s
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    action.mutate({
+                      path: "/api/player/start-countdown",
+                      body: {
+                        sessionId: countdownSession.id,
+                        seconds: Math.max(1, countdownRemainingSeconds(countdownSession) - 5)
+                      }
+                    })
+                  }
+                >
+                  -5s
+                </Button>
+              </div>
+            </section>
+          ) : null}
+          {adminSession ? (
             <SessionSettingsForm
-              session={session.data}
+              session={adminSession}
               onSave={(body) =>
                 action.mutate({
                   path: `/api/sessions/${sessionCode}`,
@@ -276,7 +347,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                 <div key={item.id} className="p-4 text-sm">
                   <p className="font-semibold">{item.song.effectiveTitle}</p>
                   <p className="text-xs text-muted-foreground">
-                    {item.status} ? {item.participant.name}
+                    {item.status} - {item.participant.name}
                   </p>
                   {item.rejectionReason ? (
                     <p className="mt-1 text-xs text-destructive">
@@ -325,7 +396,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                     </p>
                   </div>
                   <Button
-                    aria-label="Apagar sessão encerrada"
+                    aria-label="Apagar sessÃ£o encerrada"
                     size="icon"
                     variant="ghost"
                     onClick={() =>
@@ -360,3 +431,6 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
     </main>
   );
 }
+
+
+

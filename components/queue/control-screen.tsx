@@ -57,14 +57,14 @@ export function ControlScreen({ sessionId }: { sessionId: string }) {
   return (
     <main className="mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_420px]">
       <section className="space-y-4">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <header className="kanto-topbar -mx-5 flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="kanto-eyebrow">Controle</p>
             <h1 className="mt-1 text-3xl font-black tracking-tight">
               {session.data?.name ?? `Sessão ${sessionId}`}
             </h1>
             {session.data?.code ? (
-              <p className="text-sm font-bold text-secondary">
+              <p className="text-sm font-bold text-primary">
                 Código {session.data.code}
               </p>
             ) : null}

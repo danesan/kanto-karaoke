@@ -39,12 +39,18 @@ export async function POST(request: Request, { params }: Params) {
   }
 
   const service = new QueueService();
-  const item = await service.addForGuest(
-    sessionCode,
-    parsed.data.songId,
-    parsed.data.participantId,
-    parsed.data.singerName
-  );
 
-  return NextResponse.json({ item }, { status: 201 });
+  try {
+    const item = await service.addForGuest(
+      sessionCode,
+      parsed.data.songId,
+      parsed.data.participantId,
+      parsed.data.singerName
+    );
+
+    return NextResponse.json({ item }, { status: 201 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not add song";
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
 }

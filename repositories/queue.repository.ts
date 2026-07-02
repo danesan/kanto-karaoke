@@ -1,4 +1,4 @@
-import { ParticipantRole, QueueStatus, type Prisma, type PrismaClient } from "@prisma/client";
+﻿import { ParticipantRole, QueueStatus, type Prisma, type PrismaClient } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 type TransactionClient = Prisma.TransactionClient;
@@ -209,12 +209,21 @@ export class QueueRepository {
     );
   }
 
+  async finishPlaying(sessionId: string) {
+    return this.db.$transaction(async (tx) => this.finishPlayingInTransaction(tx, sessionId));
+  }
+
+  nextWaiting(sessionId: string) {
+    return this.db.queueItem.findFirst({
+      where: { sessionId, status: QueueStatus.WAITING },
+      include: { song: true, participant: true },
+      orderBy: { position: "asc" }
+    });
+  }
+
   async startNext(sessionId: string) {
     return this.db.$transaction(async (tx) => {
-      await tx.queueItem.updateMany({
-        where: { sessionId, status: QueueStatus.PLAYING },
-        data: { status: QueueStatus.FINISHED, finishedAt: new Date() }
-      });
+      await this.finishPlayingInTransaction(tx, sessionId);
 
       const next = await tx.queueItem.findFirst({
         where: { sessionId, status: QueueStatus.WAITING },
@@ -233,6 +242,40 @@ export class QueueRepository {
     });
   }
 
+  private async finishPlayingInTransaction(tx: TransactionClient, sessionId: string) {
+    const finishedAt = new Date();
+    const playingItems = await tx.queueItem.findMany({
+      where: { sessionId, status: QueueStatus.PLAYING }
+    });
+
+    for (const item of playingItems) {
+      const durationSeconds = item.startedAt
+        ? Math.max(0, Math.round((finishedAt.getTime() - item.startedAt.getTime()) / 1000))
+        : null;
+
+      await tx.queueItem.update({
+        where: { id: item.id },
+        data: { status: QueueStatus.FINISHED, finishedAt }
+      });
+
+      await tx.performance.upsert({
+        where: { queueItemId: item.id },
+        update: {
+          finishedAt,
+          durationSeconds
+        },
+        create: {
+          queueItemId: item.id,
+          sessionId: item.sessionId,
+          participantId: item.participantId,
+          songId: item.songId,
+          startedAt: item.startedAt,
+          finishedAt,
+          durationSeconds
+        }
+      });
+    }
+  }
   async rejectPendingBySong(songId: string, reason: string, adminParticipantId?: string) {
     return this.db.queueItem.updateMany({
       where: { songId, status: QueueStatus.PENDING },

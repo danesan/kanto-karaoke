@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Search, Trash2 } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { BlockSongDialog } from "@/components/admin/block-song-dialog";
 import { CacheSongTable } from "@/components/admin/cache-song-table";
@@ -11,22 +11,33 @@ import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import type { SongDTO } from "@/types/karaoke";
 
+type CacheResponse = {
+  songs: SongDTO[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
+
+const CACHE_PAGE_SIZE = 20;
+
 export function CacheManager({ sessionCode }: { sessionCode: string }) {
   const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<SongDTO | null>(null);
   const [blocking, setBlocking] = useState<SongDTO | null>(null);
   const [terms, setTerms] = useState<SongDTO | null>(null);
   const [displayTitle, setDisplayTitle] = useState("");
 
   const cache = useQuery({
-    queryKey: ["song-cache", sessionCode, query],
+    queryKey: ["song-cache", sessionCode, query, page, CACHE_PAGE_SIZE],
     queryFn: async () => {
       const response = await fetch(
-        `/api/songs/cache?sessionCode=${sessionCode}&q=${encodeURIComponent(query)}`
+        `/api/songs/cache?sessionCode=${sessionCode}&q=${encodeURIComponent(query)}&page=${page}&pageSize=${CACHE_PAGE_SIZE}`
       );
       if (!response.ok) throw new Error("Could not load cache");
-      return ((await response.json()) as { songs: SongDTO[] }).songs;
+      return (await response.json()) as CacheResponse;
     }
   });
 
@@ -34,6 +45,10 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
     void queryClient.invalidateQueries({
       queryKey: ["song-cache", sessionCode]
     });
+  const cacheData = cache.data;
+  const totalPages = cacheData?.totalPages ?? 1;
+  const currentPage = cacheData?.page ?? page;
+
   const action = useMutation({
     mutationFn: async ({
       path,
@@ -57,7 +72,7 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-7xl space-y-6 px-5 py-8">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <header className="kanto-topbar -mx-5 flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="kanto-eyebrow">Admin - Cache</p>
           <h1 className="mt-1 text-3xl font-black tracking-tight">
@@ -79,7 +94,10 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
             className="pl-10"
             placeholder="Buscar por título, canal ou ID"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setPage(1);
+            }}
           />
         </label>
         <Button
@@ -98,7 +116,7 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
       </section>
 
       <CacheSongTable
-        songs={cache.data ?? []}
+        songs={cacheData?.songs ?? []}
         onEdit={(song) => {
           setEditing(song);
           setDisplayTitle(song.displayTitle ?? song.title);
@@ -116,6 +134,30 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
         onTerms={setTerms}
       />
 
+      <section className="kanto-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-muted-foreground">
+          Página {currentPage} de {totalPages} - {cacheData?.total ?? 0} músicas no cache
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            disabled={page <= 1 || cache.isFetching}
+            onClick={() => setPage((current) => Math.max(1, current - 1))}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Anterio
+          </Button>
+          <Button
+            variant="outline"
+            disabled={page >= totalPages || cache.isFetching}
+            onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+          >
+            Próxima
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </section>
+
       <Dialog
         open={Boolean(editing)}
         title="Editar título exibido"
@@ -128,7 +170,7 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
           />
           <div className="flex justify-end gap-2">
             <Button variant="ghost" onClick={() => setEditing(null)}>
-              Cancelar
+              Cancela
             </Button>
             <Button
               onClick={() => {
@@ -141,7 +183,7 @@ export function CacheManager({ sessionCode }: { sessionCode: string }) {
                 setEditing(null);
               }}
             >
-              Salvar
+              Salva
             </Button>
           </div>
         </div>

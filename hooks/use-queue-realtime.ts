@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -32,8 +32,27 @@ export function useQueueRealtime(sessionId: string, sessionCode?: string) {
         () => {
           void queryClient.invalidateQueries({ queryKey: queueKey(sessionId) });
 
+          void queryClient.invalidateQueries({ queryKey: ["session", sessionId] });
+
           if (sessionCode) {
             void queryClient.invalidateQueries({ queryKey: guestQueueKey(sessionCode) });
+            void queryClient.invalidateQueries({ queryKey: ["session-code", sessionCode] });
+          }
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "karaoke_sessions",
+          filter: `id=eq.${sessionId}`
+        },
+        () => {
+          void queryClient.invalidateQueries({ queryKey: ["session", sessionId] });
+
+          if (sessionCode) {
+            void queryClient.invalidateQueries({ queryKey: ["session-code", sessionCode] });
           }
         }
       )

@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { YouTubeVideo } from "@/lib/youtube";
 
@@ -56,24 +56,35 @@ export class SongRepository {
     return this.db.song.findUnique({ where: { id: songId } });
   }
 
-  listCache(query = "") {
+  private cacheWhere(query = ""): Prisma.SongWhereInput {
     const trimmed = query.trim();
 
+    return trimmed
+      ? {
+          OR: [
+            { title: { contains: trimmed, mode: "insensitive" } },
+            { displayTitle: { contains: trimmed, mode: "insensitive" } },
+            { channel: { contains: trimmed, mode: "insensitive" } },
+            { youtubeVideoId: { contains: trimmed, mode: "insensitive" } }
+          ]
+        }
+      : {};
+  }
+
+  listCache(query = "", page = 1, pageSize = 20) {
+    const skip = (page - 1) * pageSize;
+
     return this.db.song.findMany({
-      where: trimmed
-        ? {
-            OR: [
-              { title: { contains: trimmed, mode: "insensitive" } },
-              { displayTitle: { contains: trimmed, mode: "insensitive" } },
-              { channel: { contains: trimmed, mode: "insensitive" } },
-              { youtubeVideoId: { contains: trimmed, mode: "insensitive" } }
-            ]
-          }
-        : {},
+      where: this.cacheWhere(query),
       include: { searchCaches: true },
       orderBy: [{ isBlocked: "asc" }, { updatedAt: "desc" }],
-      take: 100
+      skip,
+      take: pageSize
     });
+  }
+
+  countCache(query = "") {
+    return this.db.song.count({ where: this.cacheWhere(query) });
   }
 
   update(songId: string, data: { displayTitle?: string | null }) {

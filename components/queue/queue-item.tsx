@@ -15,7 +15,7 @@ export function QueueItem({
 }) {
   return (
     <div className="grid grid-cols-[36px_1fr_auto] items-center gap-3 border-b p-4 last:border-b-0">
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-secondary">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
         {item.position}
       </div>
       <div className="min-w-0">

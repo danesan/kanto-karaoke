@@ -1,4 +1,4 @@
-import { QueueStatus } from "@prisma/client";
+﻿import { QueueStatus } from "@prisma/client";
 import { ParticipantRepository } from "@/repositories/participant.repository";
 import { QueueRepository } from "@/repositories/queue.repository";
 import { SessionRepository } from "@/repositories/session.repository";
@@ -160,18 +160,36 @@ export class QueueService {
   async next(sessionId: string) {
     await this.ensureSession(sessionId);
     const item = await this.queue.startNext(sessionId);
+    await this.sessions.updatePlayerState(sessionId, {
+      playerMode: item ? "KARAOKE" : "IDLE",
+      countdownStartedAt: null,
+      countdownEndsAt: null,
+      countdownTargetQueueItemId: null
+    });
     return item ? toQueueItemDTO(item) : null;
   }
 
   async skipByCode(sessionCode: string) {
     const session = await this.ensureSessionByCode(sessionCode);
     const item = await this.queue.startNext(session.id);
+    await this.sessions.updatePlayerState(session.id, {
+      playerMode: item ? "KARAOKE" : "IDLE",
+      countdownStartedAt: null,
+      countdownEndsAt: null,
+      countdownTargetQueueItemId: null
+    });
     return item ? toQueueItemDTO(item) : null;
   }
 
   async nextBySessionKey(sessionKey: string) {
     const session = await this.ensureSessionByKey(sessionKey);
     const item = await this.queue.startNext(session.id);
+    await this.sessions.updatePlayerState(session.id, {
+      playerMode: item ? "KARAOKE" : "IDLE",
+      countdownStartedAt: null,
+      countdownEndsAt: null,
+      countdownTargetQueueItemId: null
+    });
     return item ? toQueueItemDTO(item) : null;
   }
 
@@ -216,10 +234,13 @@ export class QueueService {
   }
 
   private async startFirstSongIfNeeded(sessionId: string) {
-    const items = await this.queue.list(sessionId);
+    const [session, items] = await Promise.all([
+      this.sessions.findActiveById(sessionId),
+      this.queue.list(sessionId)
+    ]);
     const hasPlaying = items.some((queueItem) => queueItem.status === QueueStatus.PLAYING);
 
-    if (!hasPlaying) {
+    if (!hasPlaying && session && !session.showCountdown) {
       await this.queue.startNext(sessionId);
     }
   }

@@ -18,10 +18,7 @@ export function SessionHome() {
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const result = await createSession.mutateAsync(sessionName);
-    window.sessionStorage.setItem(
-      `kanto_admin_pin_${result.session.code}`,
-      result.adminPin
-    );
+    window.sessionStorage.setItem(`kanto_admin_pin_${result.session.code}`, result.adminPin);
     router.push(`/admin/${result.session.code}`);
   }
 
@@ -34,35 +31,32 @@ export function SessionHome() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-10 sm:px-6 lg:px-8">
-      <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <header className="kanto-topbar -mx-5 mb-10 flex flex-col gap-5 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:-mx-8 lg:px-8">
         <div>
-          <p className="kanto-gradient-text text-4xl font-black uppercase tracking-tight sm:text-6xl">
-            Kanto
-          </p>
-          <h1 className="mt-2 text-base font-semibold text-muted-foreground">
-            Karaokê em light mode neon elétrico
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border bg-card px-4 py-1.5 text-sm font-medium text-muted-foreground shadow-sm">
+            <Radio className="h-3.5 w-3.5 text-primary" />
+            Karaokê colaborativo em tempo real
+          </div>
+          <p className="font-display text-4xl font-black tracking-tight text-foreground sm:text-6xl">Kanto</p>
+          <h1 className="mt-3 max-w-xl text-2xl font-black tracking-tight text-foreground sm:text-4xl">
+            Controle sua noite de karaokê com fila ao vivo, convidados e moderação.
           </h1>
+          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            Crie uma sessão, compartilhe o código e aprove músicas direto do painel administrativo.
+          </p>
         </div>
-        <div className="flex gap-3 rounded-full border bg-card px-5 py-3 shadow-[var(--shadow-soft)]">
-          <Radio className="h-6 w-6 text-secondary" />
+        <div className="flex gap-3 rounded-xl border bg-card p-4 shadow-[var(--shadow-soft)]">
+          <Radio className="h-6 w-6 text-primary" />
           <MonitorPlay className="h-6 w-6 text-primary" />
         </div>
       </header>
 
       <section className="grid gap-5 lg:grid-cols-[1fr_1fr]">
         <form onSubmit={handleCreate} className="kanto-card p-6">
-          <h2 className="mb-4 text-xl font-bold">Criar sessão</h2>
+          <h2 className="mb-4 font-display text-xl font-bold">Criar sessão</h2>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Input
-              placeholder="Noite de karaoke"
-              value={sessionName}
-              onChange={(event) => setSessionName(event.target.value)}
-            />
-            <Button
-              disabled={
-                createSession.isPending || sessionName.trim().length < 2
-              }
-            >
+            <Input placeholder="Noite de karaoke" value={sessionName} onChange={(event) => setSessionName(event.target.value)} />
+            <Button disabled={createSession.isPending || sessionName.trim().length < 2}>
               <Plus className="h-4 w-4" />
               Criar
             </Button>
@@ -70,54 +64,32 @@ export function SessionHome() {
         </form>
 
         <form onSubmit={handleJoin} className="kanto-card p-6">
-          <h2 className="mb-4 text-xl font-bold">Entrar como administrador</h2>
+          <h2 className="mb-4 font-display text-xl font-bold">Entrar como administrador</h2>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Input
-              placeholder="Codigo da sessão"
-              value={joinId}
-              onChange={(event) => setJoinId(event.target.value)}
-            />
-            <Button variant="outline" disabled={!joinId.trim()}>
-              Entrar
-            </Button>
+            <Input placeholder="Código da sessão" value={joinId} onChange={(event) => setJoinId(event.target.value)} />
+            <Button variant="outline" disabled={!joinId.trim()}>Entrar</Button>
           </div>
         </form>
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-4 text-sm font-bold uppercase tracking-[0.16em] text-muted-foreground">
-          Sessões recentes
-        </h2>
+        <h2 className="mb-4 kanto-eyebrow">Sessões recentes</h2>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {sessions.data?.map((session) => (
-            <div key={session.id} className="kanto-card p-5">
-              <div className="mb-3">
-                <h3 className="text-lg font-bold">{session.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  ID: {session.id}
-                </p>
-                <p className="text-sm font-semibold text-primary">
-                  Código: {session.code}
-                </p>
+            <div key={session.id} className="kanto-card p-5 transition hover:border-primary/30 hover:shadow-[var(--shadow-lift)]">
+              <div className="mb-4">
+                <h3 className="font-display text-lg font-bold">{session.name}</h3>
+                <p className="text-sm text-muted-foreground">ID: {session.id}</p>
+                <p className="text-sm font-semibold text-primary">Código: {session.code}</p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Button asChild size="sm">
-                  <Link href={`/admin/${session.code}/login`}>Admin</Link>
-                </Button>
-                <Button asChild size="sm" variant="outline">
-                  <Link href={`/player/${session.code}`}>Player</Link>
-                </Button>
-                <Button asChild size="sm" variant="ghost">
-                  <Link href={`/join/${session.code}`}>Convidado</Link>
-                </Button>
+                <Button asChild size="sm"><Link href={`/admin/${session.code}/login`}>Admin</Link></Button>
+                <Button asChild size="sm" variant="outline"><Link href={`/player/${session.code}`}>Player</Link></Button>
+                <Button asChild size="sm" variant="ghost"><Link href={`/join/${session.code}`}>Convidado</Link></Button>
               </div>
             </div>
           ))}
-          {sessions.data?.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Nenhuma sessão ativa ainda.
-            </p>
-          ) : null}
+          {sessions.data?.length === 0 ? <p className="text-sm text-muted-foreground">Nenhuma sessão ativa ainda.</p> : null}
         </div>
       </section>
     </main>

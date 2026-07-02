@@ -44,10 +44,10 @@ export function AdminQueueControls({
           </Button>
         </div>
       </div>
-      <div className="m-5 rounded-md border border-primary/20 bg-gradient-to-br from-primary/10 to-secondary/10 p-4">
-        <p className="kanto-eyebrow">Agora tocando</p>
+      <div className="m-5 rounded-md border border-border/50 bg-gradient-to-br from-primary/10 to-secondary p-4">
+        <p className="kanto-eyebrow">Tocando agora</p>
         <p className="mt-2 font-bold">
-          {current ? current.song.effectiveTitle : "Nada tocando"}
+          {current ? current.song.effectiveTitle : "Nenhuma música tocando"}
         </p>
         {current ? (
           <p className="text-sm text-muted-foreground">

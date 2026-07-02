@@ -33,7 +33,7 @@ export function ParticipantDialog({
       await onSubmit(data.singerName);
       form.reset();
     } catch {
-      setError("Nao foi possivel adicionar a musica.");
+      setError("Não foi possivel adicionar a música.");
     }
   }
 

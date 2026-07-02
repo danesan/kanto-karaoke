@@ -21,6 +21,12 @@ enum ParticipantRole {
   GUEST
 }
 
+enum PlayerMode {
+  KARAOKE
+  COUNTDOWN
+  IDLE
+}
+
 model KaraokeSession {
   id                       String      @id @default(cuid())
   code                     String      @unique
@@ -30,11 +36,24 @@ model KaraokeSession {
   maxWaitingPerParticipant Int         @default(2) @map("max_waiting_per_participant")
   allowDuplicates          Boolean     @default(false) @map("allow_duplicates")
   moderationEnabled        Boolean     @default(true) @map("moderation_enabled")
+  countdownSeconds         Int         @default(10) @map("countdown_seconds")
+  idleModeEnabled          Boolean     @default(true) @map("idle_mode_enabled")
+  showCountdown            Boolean     @default(true) @map("show_countdown")
+  showNextSongs            Boolean     @default(true) @map("show_next_songs")
+  showQrCode               Boolean     @default(true) @map("show_qr_code")
+  playerMode               PlayerMode  @default(KARAOKE) @map("player_mode")
+  countdownStartedAt       DateTime?   @map("countdown_started_at")
+  countdownEndsAt          DateTime?   @map("countdown_ends_at")
+  countdownTargetQueueItemId String?    @map("countdown_target_queue_item_id")
+  ambientPlaylistId        String?     @map("ambient_playlist_id")
   closedAt                 DateTime?   @map("closed_at")
   createdAt                DateTime    @default(now()) @map("created_at")
   isActive                 Boolean     @default(true) @map("is_active")
   participants             Participant[]
   queueItems               QueueItem[]
+  performances             Performance[]
+  ambientPlaylists         AmbientPlaylist[]
+  ambientPlaylist          AmbientPlaylist? @relation("SessionAmbientPlaylist", fields: [ambientPlaylistId], references: [id], onDelete: SetNull)
 
   @@map("karaoke_sessions")
 }
@@ -47,6 +66,7 @@ model Participant {
   createdAt  DateTime        @default(now()) @map("created_at")
   session    KaraokeSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   queueItems QueueItem[]
+  performances Performance[]
 
   @@index([sessionId])
   @@index([sessionId, role])
@@ -69,6 +89,8 @@ model Song {
   updatedAt      DateTime      @updatedAt @map("updated_at")
   searchCaches   SearchCache[]
   queueItems     QueueItem[]
+  performances   Performance[]
+  ambientPlaylistItems AmbientPlaylistItem[]
 
   @@index([title])
   @@index([channel])
@@ -109,6 +131,7 @@ model QueueItem {
   session                  KaraokeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   song                     Song           @relation(fields: [songId], references: [id], onDelete: Restrict)
   participant              Participant    @relation(fields: [participantId], references: [id], onDelete: Restrict)
+  performance              Performance?
 
   @@index([sessionId, position])
   @@index([sessionId, status])
@@ -116,4 +139,52 @@ model QueueItem {
   @@index([addedByParticipantId])
   @@index([songId, status])
   @@map("queue_items")
+}
+model Performance {
+  id              String        @id @default(cuid())
+  queueItemId     String        @unique @map("queue_item_id")
+  sessionId       String        @map("session_id")
+  participantId   String        @map("participant_id")
+  songId          String        @map("song_id")
+  startedAt       DateTime?     @map("started_at")
+  finishedAt      DateTime      @map("finished_at")
+  durationSeconds Int?          @map("duration_seconds")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  queueItem       QueueItem     @relation(fields: [queueItemId], references: [id], onDelete: Cascade)
+  session         KaraokeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  participant     Participant   @relation(fields: [participantId], references: [id], onDelete: Restrict)
+  song            Song          @relation(fields: [songId], references: [id], onDelete: Restrict)
+
+  @@index([sessionId, finishedAt])
+  @@index([participantId])
+  @@index([songId])
+  @@map("performances")
+}
+
+model AmbientPlaylist {
+  id        String                 @id @default(cuid())
+  sessionId String                 @map("session_id")
+  name      String
+  enabled   Boolean                @default(false)
+  createdAt DateTime               @default(now()) @map("created_at")
+  session   KaraokeSession         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  selectedBySessions KaraokeSession[] @relation("SessionAmbientPlaylist")
+  items     AmbientPlaylistItem[]
+
+  @@index([sessionId])
+  @@index([sessionId, enabled])
+  @@map("ambient_playlists")
+}
+
+model AmbientPlaylistItem {
+  id         String          @id @default(cuid())
+  playlistId String          @map("playlist_id")
+  songId     String          @map("song_id")
+  position   Int
+  playlist   AmbientPlaylist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  song       Song            @relation(fields: [songId], references: [id], onDelete: Restrict)
+
+  @@unique([playlistId, songId])
+  @@index([playlistId, position])
+  @@map("ambient_playlist_items")
 }

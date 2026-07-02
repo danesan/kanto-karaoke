@@ -1,4 +1,4 @@
-import { SongRepository } from "@/repositories/song.repository";
+﻿import { SongRepository } from "@/repositories/song.repository";
 import { QueueRepository } from "@/repositories/queue.repository";
 import { toSongDTO } from "@/services/mappers";
 
@@ -8,9 +8,20 @@ export class SongService {
     private readonly queue = new QueueRepository()
   ) {}
 
-  async listCache(query = "") {
-    const songs = await this.songs.listCache(query);
-    return songs.map(toSongDTO);
+  async listCache(query = "", page = 1, pageSize = 20) {
+    const safePageSize = Math.min(100, Math.max(5, Math.floor(pageSize)));
+    const total = await this.songs.countCache(query);
+    const totalPages = Math.max(1, Math.ceil(total / safePageSize));
+    const safePage = Math.min(Math.max(1, Math.floor(page)), totalPages);
+    const songs = await this.songs.listCache(query, safePage, safePageSize);
+
+    return {
+      songs: songs.map(toSongDTO),
+      total,
+      page: safePage,
+      pageSize: safePageSize,
+      totalPages
+    };
   }
 
   async update(songId: string, data: { displayTitle?: string | null }) {
@@ -19,7 +30,7 @@ export class SongService {
 
   async block(songId: string, reason?: string, adminParticipantId?: string) {
     const song = await this.songs.block(songId, reason);
-    await this.queue.rejectPendingBySong(songId, reason || "Musica bloqueada pelo administrador", adminParticipantId);
+    await this.queue.rejectPendingBySong(songId, reason || "Música bloqueada pelo administrador", adminParticipantId);
     return toSongDTO(song);
   }
 

@@ -147,7 +147,8 @@ export function useGuestQueueMutations(sessionCode: string, participantId: strin
       });
 
       if (!response.ok) {
-        throw new Error("Could not add song");
+        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(payload?.error ?? "Could not add song");
       }
 
       return response.json();

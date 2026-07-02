@@ -39,7 +39,7 @@ export function GuestQueue({
               key={item.id}
               className="grid grid-cols-[36px_1fr_auto] items-center gap-3 p-4"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-secondary">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
                 {item.position}
               </div>
               <div className="min-w-0">
@@ -54,7 +54,7 @@ export function GuestQueue({
                 </p>
               </div>
               <Button
-                aria-label="Remover minha musica"
+                aria-label="Remover minha música"
                 size="icon"
                 variant="ghost"
                 disabled={!canRemove}

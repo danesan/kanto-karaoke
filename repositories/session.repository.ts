@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+﻿import type { PrismaClient } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export class SessionRepository {
@@ -49,6 +49,18 @@ export class SessionRepository {
       maxWaitingPerParticipant?: number;
       allowDuplicates?: boolean;
       moderationEnabled?: boolean;
+    }
+  ) {
+    return this.db.karaokeSession.update({ where: { id }, data });
+  }
+
+  updatePlayerState(
+    id: string,
+    data: {
+      playerMode?: "KARAOKE" | "COUNTDOWN" | "IDLE";
+      countdownStartedAt?: Date | null;
+      countdownEndsAt?: Date | null;
+      countdownTargetQueueItemId?: string | null;
     }
   ) {
     return this.db.karaokeSession.update({ where: { id }, data });

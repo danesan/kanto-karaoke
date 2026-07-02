@@ -13,7 +13,7 @@ export function SessionQRCode({ sessionCode }: { sessionCode: string }) {
       </div>
       <div className="min-w-0">
         <p className="kanto-eyebrow">Entrar pelo celular</p>
-        <p className="mt-1 text-3xl font-black text-secondary">{sessionCode}</p>
+        <p className="mt-1 text-3xl font-black text-primary">{sessionCode}</p>
         <p className="mt-1 break-all text-xs text-muted-foreground">
           {joinUrl}
         </p>

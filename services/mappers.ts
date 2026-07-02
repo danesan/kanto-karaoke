@@ -1,4 +1,4 @@
-import type { KaraokeSession, Participant, QueueItem, SearchCache, Song } from "@prisma/client";
+﻿import type { KaraokeSession, Participant, QueueItem, SearchCache, Song } from "@prisma/client";
 import type { ParticipantDTO, QueueItemDTO, SessionDTO, SongDTO } from "@/types/karaoke";
 
 export function toSongDTO(song: Song & { searchCaches?: SearchCache[] }): SongDTO {
@@ -42,7 +42,17 @@ export function toSessionDTO(session: KaraokeSession): SessionDTO {
     maxPendingPerParticipant: session.maxPendingPerParticipant,
     maxWaitingPerParticipant: session.maxWaitingPerParticipant,
     allowDuplicates: session.allowDuplicates,
-    moderationEnabled: session.moderationEnabled
+    moderationEnabled: session.moderationEnabled,
+    countdownSeconds: session.countdownSeconds,
+    idleModeEnabled: session.idleModeEnabled,
+    showCountdown: session.showCountdown,
+    showNextSongs: session.showNextSongs,
+    showQrCode: session.showQrCode,
+    playerMode: session.playerMode,
+    countdownStartedAt: session.countdownStartedAt?.toISOString() ?? null,
+    countdownEndsAt: session.countdownEndsAt?.toISOString() ?? null,
+    countdownTargetQueueItemId: session.countdownTargetQueueItemId,
+    ambientPlaylistId: session.ambientPlaylistId
   };
 }
 

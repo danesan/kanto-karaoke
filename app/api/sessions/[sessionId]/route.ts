@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { SessionService } from "@/services/session.service";
@@ -51,3 +51,4 @@ export async function DELETE(_request: Request, { params }: Params) {
 
   return NextResponse.json({ session });
 }
+

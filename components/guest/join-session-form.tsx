@@ -49,7 +49,7 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
       );
       router.push(`/guest/${sessionCode}`);
     } catch {
-      setError("Nao foi possivel entrar nessa sessão.");
+      setError("Não foi possivel entrar nessa sessão.");
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +60,7 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
       onSubmit={handleSubmit}
       className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-5"
     >
-      <div className="kanto-card kanto-neon-panel p-6">
+      <div className="kanto-card kanto-accent-panel p-6">
         <p className="kanto-eyebrow">Kanto</p>
         <h1 className="mt-2 text-3xl font-black">
           Entrar na sessão {sessionCode}
@@ -70,7 +70,7 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
           <Input
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="Daniel"
+            placeholder="Kanto"
             autoFocus
           />
         </label>

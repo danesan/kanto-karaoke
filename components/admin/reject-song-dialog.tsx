@@ -9,7 +9,7 @@ export function RejectSongDialog({ open, onClose, onConfirm }: { open: boolean; 
   const [reason, setReason] = useState("");
 
   return (
-    <Dialog open={open} title="Rejeitar m?sica" onClose={onClose}>
+    <Dialog open={open} title="Rejeitar música" onClose={onClose}>
       <div className="space-y-4">
         <Input placeholder="Motivo opcional" value={reason} onChange={(event) => setReason(event.target.value)} />
         <div className="flex justify-end gap-2">

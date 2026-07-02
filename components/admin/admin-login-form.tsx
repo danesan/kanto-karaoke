@@ -38,7 +38,7 @@ export function AdminLoginForm({ sessionCode }: { sessionCode: string }) {
     <main className="grid min-h-screen place-items-center px-5">
       <form
         onSubmit={handleSubmit}
-        className="kanto-card kanto-neon-panel w-full max-w-sm p-6"
+        className="kanto-card kanto-accent-panel w-full max-w-sm p-6"
       >
         <p className="kanto-eyebrow">Admin</p>
         <h1 className="mt-1 text-3xl font-black">Sessão {sessionCode}</h1>

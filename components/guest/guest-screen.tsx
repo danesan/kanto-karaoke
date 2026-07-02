@@ -54,7 +54,7 @@ export function GuestScreen({ sessionCode }: { sessionCode: string }) {
   return (
     <main className="mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_420px]">
       <section className="space-y-4">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <header className="kanto-topbar -mx-5 flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="kanto-eyebrow">Convidado</p>
             <h1 className="mt-1 text-3xl font-black tracking-tight">{title}</h1>
@@ -69,9 +69,9 @@ export function GuestScreen({ sessionCode }: { sessionCode: string }) {
         <GuestSearch
           defaultSingerName={participant.name}
           isAdding={mutations.add.isPending}
-          onAdd={(songId, singerName) =>
-            mutations.add.mutate({ songId, singerName })
-          }
+          onAdd={async (songId, singerName) => {
+            await mutations.add.mutateAsync({ songId, singerName });
+          }}
         />
       </section>
 

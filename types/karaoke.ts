@@ -1,4 +1,4 @@
-import type { ParticipantRole, QueueStatus } from "@prisma/client";
+﻿import type { ParticipantRole, QueueStatus } from "@prisma/client";
 
 export type SongDTO = {
   id: string;
@@ -58,6 +58,17 @@ export type SessionDTO = {
   maxWaitingPerParticipant: number;
   allowDuplicates: boolean;
   moderationEnabled: boolean;
+  countdownSeconds: number;
+  idleModeEnabled: boolean;
+  showCountdown: boolean;
+  showNextSongs: boolean;
+  showQrCode: boolean;
+  playerMode: "KARAOKE" | "COUNTDOWN" | "IDLE";
+  countdownStartedAt: string | null;
+  countdownEndsAt: string | null;
+  countdownTargetQueueItemId: string | null;
+  ambientPlaylistId: string | null;
 };
 
 export type SearchResultDTO = SongDTO;
+

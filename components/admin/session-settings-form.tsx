@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Save } from "lucide-react";
 import { useState } from "react";
@@ -16,20 +16,22 @@ export function SessionSettingsForm({
     maxWaitingPerParticipant: number;
     allowDuplicates: boolean;
     moderationEnabled: boolean;
+    countdownSeconds: number;
+    idleModeEnabled: boolean;
+    showCountdown: boolean;
+    showNextSongs: boolean;
+    showQrCode: boolean;
   }) => void;
 }) {
-  const [maxPending, setMaxPending] = useState(
-    session.maxPendingPerParticipant
-  );
-  const [maxWaiting, setMaxWaiting] = useState(
-    session.maxWaitingPerParticipant
-  );
-  const [allowDuplicates, setAllowDuplicates] = useState(
-    session.allowDuplicates
-  );
-  const [moderationEnabled, setModerationEnabled] = useState(
-    session.moderationEnabled
-  );
+  const [maxPending, setMaxPending] = useState(session.maxPendingPerParticipant);
+  const [maxWaiting, setMaxWaiting] = useState(session.maxWaitingPerParticipant);
+  const [allowDuplicates, setAllowDuplicates] = useState(session.allowDuplicates);
+  const [moderationEnabled, setModerationEnabled] = useState(session.moderationEnabled);
+  const [countdownSeconds, setCountdownSeconds] = useState(session.countdownSeconds);
+  const [idleModeEnabled, setIdleModeEnabled] = useState(session.idleModeEnabled);
+  const [showCountdown, setShowCountdown] = useState(session.showCountdown);
+  const [showNextSongs, setShowNextSongs] = useState(session.showNextSongs);
+  const [showQrCode, setShowQrCode] = useState(session.showQrCode);
 
   return (
     <section className="kanto-card p-5">
@@ -72,6 +74,61 @@ export function SessionSettingsForm({
           Moderação ativa
         </label>
       </div>
+
+      <div className="mt-6 rounded-xl border border-border/50 bg-card p-4">
+        <p className="text-sm font-black uppercase tracking-[0.14em] text-muted-foreground">
+          Modo Evento
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="space-y-2 text-sm font-bold text-muted-foreground">
+            Tempo de preparação
+            <select
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-sm"
+              value={countdownSeconds}
+              onChange={(event) => setCountdownSeconds(Number(event.target.value))}
+            >
+              {[5, 10, 15, 20].map((seconds) => (
+                <option key={seconds} value={seconds}>
+                  {seconds} segundos
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-3 rounded-md bg-muted/70 p-3 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={showCountdown}
+              onChange={(event) => setShowCountdown(event.target.checked)}
+            />
+            Mostrar countdown
+          </label>
+          <label className="flex items-center gap-3 rounded-md bg-muted/70 p-3 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={idleModeEnabled}
+              onChange={(event) => setIdleModeEnabled(event.target.checked)}
+            />
+            Ativar modo ambiente
+          </label>
+          <label className="flex items-center gap-3 rounded-md bg-muted/70 p-3 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={showNextSongs}
+              onChange={(event) => setShowNextSongs(event.target.checked)}
+            />
+            Mostrar próximas músicas
+          </label>
+          <label className="flex items-center gap-3 rounded-md bg-muted/70 p-3 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={showQrCode}
+              onChange={(event) => setShowQrCode(event.target.checked)}
+            />
+            Mostrar QR Code
+          </label>
+        </div>
+      </div>
+
       <Button
         className="mt-5 w-full"
         onClick={() =>
@@ -79,7 +136,12 @@ export function SessionSettingsForm({
             maxPendingPerParticipant: maxPending,
             maxWaitingPerParticipant: maxWaiting,
             allowDuplicates,
-            moderationEnabled
+            moderationEnabled,
+            countdownSeconds,
+            idleModeEnabled,
+            showCountdown,
+            showNextSongs,
+            showQrCode
           })
         }
       >

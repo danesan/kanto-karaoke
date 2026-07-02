@@ -3,55 +3,53 @@
 @tailwind utilities;
 
 :root {
-  --bg-main: #f0f4f8;
-  --bg-card: #ffffff;
-  --primary: #00d2ff;
-  --secondary: #0066ff;
-  --text-main: #0a1128;
-  --text-muted: #657795;
-  --border: #e1e8f0;
-  --bg-main-rgb: 240 244 248;
-  --bg-card-rgb: 255 255 255;
-  --primary-rgb: 0 210 255;
-  --secondary-rgb: 0 102 255;
-  --text-main-rgb: 10 17 40;
-  --text-muted-rgb: 101 119 149;
-  --border-rgb: 225 232 240;
-  --background: var(--bg-main);
-  --foreground: var(--text-main);
-  --card: var(--bg-card);
-  --card-foreground: var(--text-main);
-  --primary-foreground: #ffffff;
-  --secondary-foreground: #ffffff;
-  --muted: #eaf0f6;
-  --muted-foreground: var(--text-muted);
-  --destructive: #df1c1c;
-  --destructive-foreground: #ffffff;
-  --input: var(--border);
-  --ring: var(--primary);
-  --shadow-soft: 0 14px 40px rgba(10, 17, 40, 0.06);
-  --shadow-neon: 0 14px 30px rgba(0, 102, 255, 0.18);
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 243 75% 59%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 243 75% 59%;
+  --radius: 0.75rem;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --shadow-soft: 0 12px 30px hsl(var(--foreground) / 0.06);
+  --shadow-lift: 0 20px 45px hsl(var(--foreground) / 0.10);
+  --shadow-accent: 0 18px 40px hsl(var(--primary) / 0.14);
 }
 
 * {
-  border-color: var(--border);
+  border-color: hsl(var(--border));
+}
+
+html {
+  background: hsl(var(--background));
 }
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(0, 210, 255, 0.16),
-      transparent 34rem
-    ),
-    radial-gradient(
-      circle at top right,
-      rgba(0, 102, 255, 0.12),
-      transparent 30rem
-    ),
-    var(--bg-main);
-  color: var(--text-main);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-primary), "Plus Jakarta Sans", system-ui, sans-serif;
+  font-feature-settings: "kern";
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-secondary), "DM Sans", system-ui, sans-serif;
+  letter-spacing: 0;
 }
 
 button,
@@ -59,24 +57,40 @@ input {
   font: inherit;
 }
 
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 @layer components {
+  .kanto-topbar {
+    @apply sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-lg;
+  }
+
+  .kanto-page {
+    @apply mx-auto min-h-screen w-full max-w-7xl px-5 py-8;
+  }
+
   .kanto-card {
-    @apply rounded-2xl border bg-card shadow-[var(--shadow-soft)];
+    @apply rounded-xl border border-border/50 bg-card text-card-foreground shadow-sm;
   }
 
   .kanto-card-header {
-    @apply flex items-center justify-between gap-3 border-b px-5 py-4;
+    @apply flex items-center justify-between gap-3 border-b border-border/50 px-5 py-4;
   }
 
   .kanto-eyebrow {
-    @apply text-xs font-bold uppercase tracking-[0.16em] text-primary;
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-primary;
   }
 
   .kanto-gradient-text {
-    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent;
   }
 
-  .kanto-neon-panel {
-    @apply border-primary/25 bg-gradient-to-br from-primary/10 to-secondary/10 shadow-[var(--shadow-neon)];
+  .kanto-accent-panel {
+    @apply rounded-xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary shadow-[var(--shadow-accent)];
   }
 }

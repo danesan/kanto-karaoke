@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 
@@ -9,6 +9,8 @@ type PlayerStateChangeEvent = {
 type YouTubePlayerInstance = {
   destroy: () => void;
   loadVideoById: (videoId: string) => void;
+  getCurrentTime?: () => number;
+  getDuration?: () => number;
 };
 
 type YouTubePlayerConstructor = new (
@@ -19,6 +21,7 @@ type YouTubePlayerConstructor = new (
     height: string;
     playerVars: Record<string, number>;
     events: {
+      onReady?: () => void;
       onStateChange: (event: PlayerStateChangeEvent) => void;
     };
   }
@@ -53,17 +56,50 @@ function loadYouTubeApi() {
   return youtubeApiPromise;
 }
 
-export function YouTubePlayer({ videoId, onEnded }: { videoId: string; onEnded: () => void }) {
+export function YouTubePlayer({
+  videoId,
+  onEnded,
+  onProgress
+}: {
+  videoId: string;
+  onEnded: () => void;
+  onProgress?: (progress: { currentTime: number; duration: number }) => void;
+}) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const player = useRef<YouTubePlayerInstance | null>(null);
   const onEndedRef = useRef(onEnded);
+  const onProgressRef = useRef(onProgress);
+  const isReadyRef = useRef(false);
 
   useEffect(() => {
     onEndedRef.current = onEnded;
   }, [onEnded]);
 
   useEffect(() => {
+    onProgressRef.current = onProgress;
+  }, [onProgress]);
+
+  useEffect(() => {
     let cancelled = false;
+
+    const progressTimer = window.setInterval(() => {
+      const currentPlayer = player.current;
+
+      if (
+        !currentPlayer ||
+        !isReadyRef.current ||
+        !onProgressRef.current ||
+        typeof currentPlayer.getCurrentTime !== "function" ||
+        typeof currentPlayer.getDuration !== "function"
+      ) {
+        return;
+      }
+
+      onProgressRef.current({
+        currentTime: currentPlayer.getCurrentTime(),
+        duration: currentPlayer.getDuration()
+      });
+    }, 500);
 
     loadYouTubeApi().then(() => {
       if (cancelled || !window.YT || !hostRef.current) {
@@ -71,6 +107,7 @@ export function YouTubePlayer({ videoId, onEnded }: { videoId: string; onEnded: 
       }
 
       if (player.current) {
+        isReadyRef.current = false;
         player.current.loadVideoById(videoId);
         return;
       }
@@ -89,6 +126,9 @@ export function YouTubePlayer({ videoId, onEnded }: { videoId: string; onEnded: 
           modestbranding: 1
         },
         events: {
+          onReady: () => {
+            isReadyRef.current = true;
+          },
           onStateChange: (event) => {
             if (event.data === window.YT?.PlayerState.ENDED) {
               onEndedRef.current();
@@ -100,6 +140,8 @@ export function YouTubePlayer({ videoId, onEnded }: { videoId: string; onEnded: 
 
     return () => {
       cancelled = true;
+      isReadyRef.current = false;
+      window.clearInterval(progressTimer);
     };
   }, [videoId]);
 
@@ -109,6 +151,7 @@ export function YouTubePlayer({ videoId, onEnded }: { videoId: string; onEnded: 
         player.current?.destroy();
       } finally {
         player.current = null;
+        isReadyRef.current = false;
         hostRef.current?.replaceChildren();
       }
     };
