@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto - Escolha sua música</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            position: sticky;
+            top: 0;
+            background: var(--bg-main);
+            padding: 10px 0 20px 0;
+            z-index: 10;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-card);
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .results-title {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .song-card {
+            background: var(--bg-card);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-meta h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .song-meta p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Menu Inferior Fixo */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            border: none;
+            background: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 Digite o nome da música ou artista...">
+        </div>
+
+        <h3 class="results-title">Músicas mais tocadas</h3>
+        <div class="results-list">
+            <div class="song-card">
+                <div class="song-meta">
+                    <h4>Anna Julia</h4>
+                    <p>Los Hermanos</p>
+                </div>
+                <button class="btn-add">Cantar</button>
+            </div>
+            <div class="song-card">
+                <div class="song-meta">
+                    <h4>Inaraí</h4>
+                    <p>Katinguelê</p>
+                </div>
+                <button class="btn-add">Cantar</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active">🎵 <span>Pedir Música</span></button>
+        <button class="nav-item">📋 <span>Ver Fila (3)</span></button>
+    </nav>
+
+</body>
+
+</html>

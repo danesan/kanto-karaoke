@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto - Cache</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 30px 20px;
+        }
+
+        .cache-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .btn-back {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .search-filter-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filter-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-card);
+            outline: none;
+        }
+
+        .btn-clear-cache {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Tabela customizada light */
+        .table-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--bg-main);
+            padding: 14px 16px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .thumb-td {
+            width: 60px;
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cache-container">
+        <header>
+            <div>
+                <p>Admin - Cache</p>
+                <h1>Músicas salvas</h1>
+            </div>
+            <button class="btn-back"><- Dashboard</button>
+        </header>
+
+        <div class="search-filter-row">
+            <input type="text" class="filter-input" placeholder="Buscar por título, canal ou ID">
+            <button class="btn-clear-cache">🗑️ Limpar antigos</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thumb</th>
+                        <th>Título Original</th>
+                        <th>Canal</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="thumb-td"></span></td>
+                        <td><strong>ATÉ QUE DUROU (coro + back vocals) - PÉRICLES</strong></td>
+                        <td>karaoke renatobone2020</td>
+                        <td><span style="color: green; font-weight: 600;">● Ativo</span></td>
+                        <td class="actions-cell">✏️ ❤️ 🚫</td>
+                    </tr>
+                    <tr>
+                        <td><span class="thumb-td"></span></td>
+                        <td><strong>Ate que durou - 1 tom - karaoke cifrado</strong></td>
+                        <td>CIFRA OKE</td>
+                        <td><span style="color: green; font-weight: 600;">● Ativo</span></td>
+                        <td class="actions-cell">✏️ ❤️ 🚫</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

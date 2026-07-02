@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto TV - Tocando Agora</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Grotesk:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            justify-content: space-between;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .instructions {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .instructions strong {
+            color: var(--primary);
+        }
+
+        .now-playing-display {
+            text-align: center;
+            margin: auto 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 42, 122, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .song-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        .artist-name {
+            font-size: 2rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .singer-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: var(--bg-card);
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .singer-name span {
+            color: var(--secondary);
+        }
+
+        .upcoming-bar {
+            background: var(--bg-card);
+            padding: 24px 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .upcoming-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-right: 2px solid var(--border);
+            padding-right: 30px;
+        }
+
+        .next-songs {
+            display: flex;
+            gap: 40px;
+            flex-grow: 1;
+        }
+
+        .next-item {
+            font-size: 1.1rem;
+        }
+
+        .next-item span {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">KANTO</div>
+        <div class="instructions">Acesse e digite o código: <strong>A79B</strong></div>
+    </header>
+
+    <div class="now-playing-display">
+        <div class="status-badge">Solta a voz! 🎤</div>
+        <h1 class="song-title">Evidências</h1>
+        <h2 class="artist-name">Chitãozinho & Xororó</h2>
+        <div class="singer-name">No microfone: <span>Juliana</span></div>
+    </div>
+
+    <div class="upcoming-bar">
+        <div class="upcoming-label">A Seguir</div>
+        <div class="next-songs">
+            <div class="next-item">1. Bohemian Rhapsody - <span>Carlos</span></div>
+            <div class="next-item">2. Falta Você - <span>Mariana</span></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

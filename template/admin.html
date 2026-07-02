@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto - Admin</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+            --danger: #DF1C1C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .room-code {
+            background: var(--bg-card);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .dashboard {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Tocando Agora */
+        .current-track {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(255, 42, 122, 0.15);
+        }
+
+        .track-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .track-info p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .admin-controls button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .admin-controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Fila */
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .queue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .queue-item {
+            background: var(--bg-card);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-details h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .song-details p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-main);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            color: var(--danger);
+            border-color: #FAD4D4;
+            background: #FDF3F3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">KANTO</div>
+        <div class="room-code">SALA: <span>A79B</span></div>
+    </header>
+
+    <main class="dashboard">
+        <div class="current-track">
+            <div class="track-info">
+                <p>TOCANDO AGORA</p>
+                <h3>Evidências - Chitãozinho & Xororó</h3>
+                <p>Cantor(a): <strong>Juliana</strong></p>
+            </div>
+            <div class="admin-controls">
+                <button>Próxima ⏭️</button>
+            </div>
+        </div>
+
+        <h3 class="section-title">Próximas da Fila (3)</h3>
+        <div class="queue-list">
+            <div class="queue-item">
+                <div class="song-details">
+                    <h4>Bohemian Rhapsody</h4>
+                    <p>Queen • Pedido por: <strong>Carlos</strong></p>
+                </div>
+                <div class="actions">
+                    <button class="btn-action">🔼 Subir</button>
+                    <button class="btn-action btn-delete">Remover</button>
+                </div>
+            </div>
+            <div class="queue-item">
+                <div class="song-details">
+                    <h4>Falta Você</h4>
+                    <p>Thiaguinho • Pedido por: <strong>Mariana</strong></p>
+                </div>
+                <div class="actions">
+                    <button class="btn-action">🔼 Subir</button>
+                    <button class="btn-action btn-delete">Remover</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

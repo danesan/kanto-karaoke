@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+            --danger: #DF1C1C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 30px 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 7fr 4fr;
+            gap: 24px;
+        }
+
+        header {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .meta-info h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .meta-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-header {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .playing-box {
+            background: linear-gradient(135deg, rgba(255, 42, 122, 0.05), rgba(121, 40, 202, 0.05));
+            border: 1px solid rgba(255, 42, 122, 0.15);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 10px;
+        }
+
+        .playing-box small {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        .playing-box h4 {
+            font-size: 1.1rem;
+            margin: 4px 0;
+            font-weight: 600;
+        }
+
+        .playing-box p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 30px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Formulario Lateral */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-main);
+            font-weight: 600;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-block {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #1a1c24;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <header>
+            <div class="meta-info">
+                <h1>⚡ Admin / Teste</h1>
+                <p>Código: BXVTFY</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-header">Cache</button>
+                <button class="btn-header">Player</button>
+                <button class="btn-header">-> Sair</button>
+            </div>
+        </header>
+
+        <section>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎵 Fila aguardando</div>
+                    <div class="header-actions">
+                        <button class="btn-header">⏩ Pular</button>
+                        <button class="btn-header">🗑️ Limpar</button>
+                    </div>
+                </div>
+                <div class="playing-box">
+                    <small>Agora Tocando</small>
+                    <h4>Karaokê - Péricles - Até Que Durou</h4>
+                    <p>Cantor(a): Bárbara</p>
+                </div>
+                <div class="empty-state" style="margin-top: 15px; border-top: 1px dashed var(--border);">
+                    Fila vazia.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⏳ Sugestões pendentes</div>
+                </div>
+                <div class="empty-state">Nenhuma sugestão pendente.</div>
+            </div>
+        </section>
+
+        <aside>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⚙️ Configurações da sessão</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pendentes por part.</label>
+                        <input type="number" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>Aguardando por part.</label>
+                        <input type="number" value="2">
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox"> Permitir duplicadas</label>
+                    <label class="checkbox-item"><input type="checkbox" checked> Moderação ativa</label>
+                </div>
+                <button class="btn-block"
+                    style="background: linear-gradient(135deg, var(--primary), var(--secondary));">Salvar
+                    Configurações</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🛑 Perigo</div>
+                </div>
+                <button class="btn-block btn-danger">Encerrar sessão</button>
+            </div>
+        </aside>
+    </div>
+
+</body>
+
+</html>

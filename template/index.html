@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto - Home</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 40px 20px;
+        }
+
+        .wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-icons {
+            display: flex;
+            gap: 16px;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .grid-setup {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-main);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-main);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .recent-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recent-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+        }
+
+        .recent-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .recent-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .recent-code {
+            color: #00B0FF;
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .actions-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-main);
+            cursor: pointer;
+        }
+
+        .btn-active-tab {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <header>
+            <div class="logo">KANTO</div>
+            <div class="top-icons">📶 📺</div>
+        </header>
+
+        <main>
+            <div class="grid-setup">
+                <div class="card">
+                    <h2>Criar sessão</h2>
+                    <div class="input-group">
+                        <input type="text" placeholder="Noite de karaoke">
+                        <button class="btn btn-primary">+ Criar</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Entrar como administrador</h2>
+                    <div class="input-group">
+                        <input type="text" placeholder="Código da sessão">
+                        <button class="btn btn-secondary">Entrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="recent-title">Sessões recentes</h3>
+            <div class="recent-box">
+                <h3>Teste</h3>
+                <p>ID: cmr2g48h40000vgcjtq5t015y</p>
+                <p class="recent-code">Código: BXVTFY</p>
+                <div class="actions-row">
+                    <button class="btn-sm btn-active-tab">Admin</button>
+                    <button class="btn-sm">Player</button>
+                    <button class="btn-sm">Convidado</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanto - Pesquisar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F4F5F8;
+            --bg-card: #FFFFFF;
+            --primary: #FF2A7A;
+            --secondary: #7928CA;
+            --text-main: #1A1C24;
+            --text-muted: #6C7284;
+            --border: #E2E4E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        .main-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 7fr 4fr;
+            gap: 24px;
+        }
+
+        header {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .btn-top {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-card);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .results-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .song-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .song-thumb {
+            width: 80px;
+            height: 50px;
+            background: #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            object-fit: cover;
+        }
+
+        .song-info {
+            flex: 1;
+        }
+
+        .song-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .song-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .singer-input-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .singer-input-box input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            background: var(--bg-main);
+        }
+
+        .btn-add {
+            background: #1A1C24;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Lateral - Fila */
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            height: max-content;
+        }
+
+        .sidebar-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .queue-mini-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .queue-index {
+            width: 24px;
+            height: 24px;
+            background: var(--bg-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .queue-meta {
+            flex: 1;
+        }
+
+        .queue-meta h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .queue-meta p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .badge-playing {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-layout">
+        <header>
+            <div>
+                <p
+                    style="text-transform: uppercase; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; font-size: 0.75rem;">
+                    Convidado</p>
+                <h1>Teste</h1>
+                <p>Entrou como Bárbara</p>
+            </div>
+            <button class="btn-top">Trocar nome</button>
+        </header>
+
+        <main>
+            <div class="search-row">
+                <input type="text" class="search-bar" value="até que durou karaoke">
+                <button class="btn-search">Buscar</button>
+            </div>
+
+            <div class="results-wrapper">
+                <div class="song-item">
+                    <div class="song-thumb" style="background: #ccc;"></div>
+                    <div class="song-info">
+                        <h4>Até Que Durou (Melhor Karaokê) Péricles</h4>
+                        <p>Karaokê Melhor Do Brasil • 03:29</p>
+                        <div class="singer-input-box">
+                            <input type="text" value="Bárbara">
+                            <button class="btn-add">+ Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside>
+            <div class="sidebar-card">
+                <h3>Fila da sessão</h3>
+                <div class="queue-mini-item">
+                    <div class="queue-index">1</div>
+                    <div class="queue-meta">
+                        <h5>Karaokê - Péricles - Até Que Durou</h5>
+                        <p>Bárbara</p>
+                        <span class="badge-playing">PLAYING</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+</body>
+
+</html>
