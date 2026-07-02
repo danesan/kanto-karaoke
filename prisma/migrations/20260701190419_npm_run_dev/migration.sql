@@ -1,0 +1,12 @@
+-- AlterTable
+ALTER TABLE "karaoke_sessions" ALTER COLUMN "closed_at" SET DATA TYPE TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE "queue_items" ALTER COLUMN "status" SET DEFAULT 'PENDING',
+ALTER COLUMN "approved_at" SET DATA TYPE TIMESTAMP(3),
+ALTER COLUMN "rejected_at" SET DATA TYPE TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE "songs" ALTER COLUMN "blocked_at" SET DATA TYPE TIMESTAMP(3),
+ALTER COLUMN "updated_at" DROP DEFAULT,
+ALTER COLUMN "updated_at" SET DATA TYPE TIMESTAMP(3);
