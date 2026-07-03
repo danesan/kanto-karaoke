@@ -70,19 +70,30 @@ export type SessionDTO = {
   ambientPlaylistId: string | null;
 };
 
-export type AmbientPlaylistItemDTO = {
+export type PlaylistType = "CUSTOM" | "FAVORITES" | "MOST_PLAYED" | "GENRE" | "AMBIENT";
+
+export type PlaylistItemDTO = {
   id: string;
   position: number;
   song: SongDTO;
+  playCount?: number;
 };
 
-export type AmbientPlaylistDTO = {
+export type PlaylistDTO = {
   id: string;
   sessionId: string;
   name: string;
+  description: string | null;
+  type: PlaylistType;
+  genre: string | null;
   enabled: boolean;
+  isSystem: boolean;
   createdAt: string;
-  items: AmbientPlaylistItemDTO[];
+  updatedAt: string;
+  items: PlaylistItemDTO[];
 };
+
+export type AmbientPlaylistItemDTO = PlaylistItemDTO;
+export type AmbientPlaylistDTO = PlaylistDTO;
 
 export type SearchResultDTO = SongDTO;

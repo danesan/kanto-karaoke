@@ -27,6 +27,14 @@ enum PlayerMode {
   IDLE
 }
 
+enum PlaylistType {
+  CUSTOM
+  FAVORITES
+  MOST_PLAYED
+  GENRE
+  AMBIENT
+}
+
 model KaraokeSession {
   id                       String      @id @default(cuid())
   code                     String      @unique
@@ -162,16 +170,22 @@ model Performance {
 }
 
 model AmbientPlaylist {
-  id        String                 @id @default(cuid())
-  sessionId String                 @map("session_id")
-  name      String
-  enabled   Boolean                @default(false)
-  createdAt DateTime               @default(now()) @map("created_at")
-  session   KaraokeSession         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  id          String                 @id @default(cuid())
+  sessionId   String                 @map("session_id")
+  name        String
+  description String?
+  type        PlaylistType           @default(AMBIENT)
+  genre       String?
+  enabled     Boolean                @default(false)
+  isSystem    Boolean                @default(false) @map("is_system")
+  createdAt   DateTime               @default(now()) @map("created_at")
+  updatedAt   DateTime               @updatedAt @map("updated_at")
+  session     KaraokeSession         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   selectedBySessions KaraokeSession[] @relation("SessionAmbientPlaylist")
-  items     AmbientPlaylistItem[]
+  items       AmbientPlaylistItem[]
 
   @@index([sessionId])
+  @@index([sessionId, type])
   @@index([sessionId, enabled])
   @@map("ambient_playlists")
 }

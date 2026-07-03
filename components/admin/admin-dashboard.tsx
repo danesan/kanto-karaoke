@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Copy,
   History,
+  ListMusic,
   LogOut,
   Settings,
   ShieldCheck,
@@ -14,7 +15,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AdminQueueControls } from "@/components/admin/admin-queue-controls";
-import { AmbientPlaylistEditor } from "@/components/admin/ambient-playlist-editor";
 import { PendingQueueList } from "@/components/admin/pending-queue-list";
 import { RejectSongDialog } from "@/components/admin/reject-song-dialog";
 import { SessionSettingsForm } from "@/components/admin/session-settings-form";
@@ -58,7 +58,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
     queryKey: ["session-code", sessionCode],
     queryFn: async () => {
       const response = await fetch(`/api/sessions/code/${sessionCode}`);
-      if (!response.ok) throw new Error("Nao foi possivel carregar a sessÃƒÂ£o");
+      if (!response.ok) throw new Error("Nao foi possivel carregar a sessÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o");
       return ((await response.json()) as { session: SessionDTO }).session;
     }
   });
@@ -163,10 +163,10 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
             Admin
           </p>
           <h1 className="mt-1 text-3xl font-black tracking-tight">
-            {session.data?.name ?? `Sessão ${sessionCode}`}
+            {session.data?.name ?? `SessÃƒÂ£o ${sessionCode}`}
           </h1>
           <p className="text-sm font-bold text-primary">
-            Código {sessionCode}
+            CÃƒÂ³digo {sessionCode}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -174,13 +174,19 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
             <Link href={`/admin/${sessionCode}/cache`}>Cache</Link>
           </Button>
           <Button asChild variant="outline">
+            <Link href={`/admin/${sessionCode}/playlists`}>
+              <ListMusic className="h-4 w-4" />
+              Playlists
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link href={`/player/${sessionCode}`} target="_blank">
-              Player
+              Playe
             </Link>
           </Button>
           <Button variant="ghost" onClick={logout}>
             <LogOut className="h-4 w-4" />
-            Sair
+            Sai
           </Button>
         </div>
       </header>
@@ -189,12 +195,12 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
         <section className="kanto-card kanto-accent-panel p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="kanto-eyebrow">PIN administrativo desta sessão</p>
+              <p className="kanto-eyebrow">PIN administrativo desta sessÃƒÂ£o</p>
               <p className="mt-1 font-mono text-2xl font-bold tracking-widest">
                 {createdPin}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Guarde este PIN agora. Por segurança, ele não fica salvo em texto puro no banco.
+                Guarde este PIN agora. Por seguranÃƒÂ§a, ele nÃƒÂ£o fica salvo em texto puro no banco.
               </p>
             </div>
             <div className="flex gap-2">
@@ -203,7 +209,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                 onClick={() => navigator.clipboard?.writeText(createdPin)}
               >
                 <Copy className="h-4 w-4" />
-                Copiar
+                Copia
               </Button>
               <Button
                 aria-label="Ocultar PIN"
@@ -280,7 +286,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                     })
                   }
                 >
-                  Cancelar
+                  Cancela
                 </Button>
                 <Button
                   onClick={() =>
@@ -335,12 +341,11 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
               }
             />
           ) : null}
-          <AmbientPlaylistEditor sessionCode={sessionCode} />
           <section className="kanto-card">
             <div className="kanto-card-header">
               <div className="flex items-center gap-2">
                 <History className="h-5 w-5 text-primary" />
-                <h2 className="text-lg font-bold">Histórico de músicas</h2>
+                <h2 className="text-lg font-bold">HistÃƒÂ³rico de mÃƒÂºsicas</h2>
               </div>
             </div>
             <div className="divide-y divide-border">
@@ -362,7 +367,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
           <section className="kanto-card p-5">
             <div className="flex items-center gap-2">
               <Settings className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-bold">Sessão</h2>
+              <h2 className="text-lg font-bold">SessÃƒÂ£o</h2>
             </div>
             <Button
               className="mt-4 w-full"
@@ -370,17 +375,17 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
               disabled={closeSession.isPending}
               onClick={() => closeSession.mutate()}
             >
-              Encerrar sessão
+              Encerrar sessÃƒÂ£o
             </Button>
           </section>
           <section className="kanto-card">
             <div className="kanto-card-header">
-              <h2 className="text-lg font-bold">Sessões encerradas</h2>
+              <h2 className="text-lg font-bold">SessÃƒÂµes encerradas</h2>
             </div>
             <div className="divide-y divide-border">
               {(inactiveSessions.data ?? []).length === 0 ? (
                 <p className="p-4 text-sm text-muted-foreground">
-                  Nenhuma sessão encerrada para apagar.
+                  Nenhuma sessÃƒÂ£o encerrada para apagar.
                 </p>
               ) : null}
               {(inactiveSessions.data ?? []).map((inactiveSession) => (
@@ -393,11 +398,11 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                       {inactiveSession.name}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Código {inactiveSession.code}
+                      CÃƒÂ³digo {inactiveSession.code}
                     </p>
                   </div>
                   <Button
-                    aria-label="Apagar sessÃƒÂ£o encerrada"
+                    aria-label="Apagar sessÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o encerrada"
                     size="icon"
                     variant="ghost"
                     onClick={() =>
