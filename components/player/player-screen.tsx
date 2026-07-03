@@ -12,6 +12,7 @@ import { YouTubePlayer } from "@/components/player/youtube-player";
 import { queueKey, useQueue } from "@/hooks/use-queue";
 import { useQueueRealtime } from "@/hooks/use-queue-realtime";
 import { useSession } from "@/hooks/use-sessions";
+import { useJoinUrl } from "@/lib/app-url";
 
 function secondsUntil(date: string | null | undefined) {
   if (!date) {
@@ -84,8 +85,7 @@ export function PlayerScreen({
     return nextSongs.find((item) => item.id === targetId) ?? nextSongs[0];
   }, [nextSongs, session.data?.countdownTargetQueueItemId]);
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "";
-  const joinUrl = sessionCode ? `${appUrl}/join/${sessionCode}` : "";
+  const joinUrl = useJoinUrl(sessionCode ?? "");
   const isCountdown = session.data?.playerMode === "COUNTDOWN";
   const showQrCode = session.data?.showQrCode ?? true;
   const showNextSongs = session.data?.showNextSongs ?? true;

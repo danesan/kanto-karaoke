@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSessionByCode } from "@/hooks/use-sessions";
 import type { ParticipantDTO, SessionDTO } from "@/types/karaoke";
 
 export function guestStorageKey(sessionCode: string) {
@@ -12,9 +13,13 @@ export function guestStorageKey(sessionCode: string) {
 
 export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
   const router = useRouter();
+  const session = useSessionByCode(sessionCode);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const sessionName = session.isLoading
+    ? "Carregando sessão..."
+    : (session.data?.name ?? "sessão");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,9 +67,7 @@ export function JoinSessionForm({ sessionCode }: { sessionCode: string }) {
     >
       <div className="kanto-card kanto-accent-panel p-6">
         <p className="kanto-eyebrow">Kanto</p>
-        <h1 className="mt-2 text-3xl font-black">
-          Entrar na sessão {sessionCode}
-        </h1>
+        <h1 className="mt-2 text-3xl font-black">Entrar em {sessionName}</h1>
         <label className="mt-5 block space-y-2">
           <span className="text-sm font-medium">Seu nome</span>
           <Input

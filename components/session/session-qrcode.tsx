@@ -1,10 +1,10 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
+import { useJoinUrl } from "@/lib/app-url";
 
 export function SessionQRCode({ sessionCode }: { sessionCode: string }) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "";
-  const joinUrl = `${appUrl}/join/${sessionCode}`;
+  const joinUrl = useJoinUrl(sessionCode);
 
   return (
     <div className="kanto-card flex items-center gap-4 p-4 text-foreground">
