@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AdminQueueControls } from "@/components/admin/admin-queue-controls";
+import { AmbientPlaylistEditor } from "@/components/admin/ambient-playlist-editor";
 import { PendingQueueList } from "@/components/admin/pending-queue-list";
 import { RejectSongDialog } from "@/components/admin/reject-song-dialog";
 import { SessionSettingsForm } from "@/components/admin/session-settings-form";
@@ -57,7 +58,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
     queryKey: ["session-code", sessionCode],
     queryFn: async () => {
       const response = await fetch(`/api/sessions/code/${sessionCode}`);
-      if (!response.ok) throw new Error("Nao foi possivel carregar a sessÃ£o");
+      if (!response.ok) throw new Error("Nao foi possivel carregar a sessÃƒÂ£o");
       return ((await response.json()) as { session: SessionDTO }).session;
     }
   });
@@ -162,7 +163,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
             Admin
           </p>
           <h1 className="mt-1 text-3xl font-black tracking-tight">
-            {session.data?.name ?? `SessÃ£o ${sessionCode}`}
+            {session.data?.name ?? `Sessão ${sessionCode}`}
           </h1>
           <p className="text-sm font-bold text-primary">
             Código {sessionCode}
@@ -193,8 +194,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                 {createdPin}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Guarde este PIN agora. Por segurança, ele não fica salvo em
-                texto puro no banco.
+                Guarde este PIN agora. Por segurança, ele não fica salvo em texto puro no banco.
               </p>
             </div>
             <div className="flex gap-2">
@@ -335,11 +335,12 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
               }
             />
           ) : null}
+          <AmbientPlaylistEditor sessionCode={sessionCode} />
           <section className="kanto-card">
             <div className="kanto-card-header">
               <div className="flex items-center gap-2">
                 <History className="h-5 w-5 text-primary" />
-                <h2 className="text-lg font-bold">Histórico</h2>
+                <h2 className="text-lg font-bold">Histórico de músicas</h2>
               </div>
             </div>
             <div className="divide-y divide-border">
@@ -396,7 +397,7 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
                     </p>
                   </div>
                   <Button
-                    aria-label="Apagar sessÃ£o encerrada"
+                    aria-label="Apagar sessÃƒÂ£o encerrada"
                     size="icon"
                     variant="ghost"
                     onClick={() =>
@@ -431,6 +432,3 @@ export function AdminDashboard({ sessionCode }: { sessionCode: string }) {
     </main>
   );
 }
-
-
-

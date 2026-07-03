@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { AmbientPlaylistService } from "@/services/ambient-playlist.service";
@@ -50,7 +50,8 @@ export async function PATCH(request: Request) {
 
   await requireAdmin(parsed.data.sessionCode);
   const service = new AmbientPlaylistService();
-  return NextResponse.json({ playlist: await service.update(parsed.data.sessionCode, parsed.data.id, parsed.data) });
+  const { sessionCode, id, name, enabled } = parsed.data;
+  return NextResponse.json({ playlist: await service.update(sessionCode, id, { name, enabled }) });
 }
 
 export async function DELETE(request: Request) {

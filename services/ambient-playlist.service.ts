@@ -1,8 +1,11 @@
-﻿import { AmbientPlaylistRepository } from "@/repositories/ambient-playlist.repository";
+import { AmbientPlaylistRepository } from "@/repositories/ambient-playlist.repository";
 import { SessionRepository } from "@/repositories/session.repository";
 import { toSongDTO } from "@/services/mappers";
+import type { AmbientPlaylistDTO } from "@/types/karaoke";
 
-function toAmbientPlaylistDTO(playlist: Awaited<ReturnType<AmbientPlaylistRepository["create"]>>) {
+type PlaylistWithItems = Awaited<ReturnType<AmbientPlaylistRepository["create"]>>;
+
+function toAmbientPlaylistDTO(playlist: PlaylistWithItems): AmbientPlaylistDTO {
   return {
     id: playlist.id,
     sessionId: playlist.sessionId,
@@ -24,28 +27,66 @@ export class AmbientPlaylistService {
   ) {}
 
   async list(sessionCode: string) {
-    const session = await this.ensureSession(sessionCode);
+    const session = await this.ensureSessionByCode(sessionCode);
     const playlists = await this.playlists.list(session.id);
     return playlists.map(toAmbientPlaylistDTO);
   }
 
+  async active(sessionKey: string) {
+    const session = await this.ensureSessionByKey(sessionKey);
+
+    if (!session.idleModeEnabled) {
+      return null;
+    }
+
+    const playlist = await this.playlists.active(session.id);
+    return playlist ? toAmbientPlaylistDTO(playlist) : null;
+  }
+
   async create(sessionCode: string, name: string) {
-    const session = await this.ensureSession(sessionCode);
+    const session = await this.ensureSessionByCode(sessionCode);
     return toAmbientPlaylistDTO(await this.playlists.create(session.id, name.trim()));
   }
 
   async update(sessionCode: string, id: string, data: { name?: string; enabled?: boolean }) {
-    const session = await this.ensureSession(sessionCode);
-    return toAmbientPlaylistDTO(await this.playlists.update(id, session.id, data));
+    const session = await this.ensureSessionByCode(sessionCode);
+    return toAmbientPlaylistDTO(
+      await this.playlists.update(id, session.id, {
+        name: data.name,
+        enabled: data.enabled
+      })
+    );
   }
 
   async delete(sessionCode: string, id: string) {
-    const session = await this.ensureSession(sessionCode);
+    const session = await this.ensureSessionByCode(sessionCode);
     return this.playlists.delete(id, session.id);
   }
 
-  private async ensureSession(sessionCode: string) {
+  async addItem(sessionCode: string, playlistId: string, songId: string) {
+    const session = await this.ensureSessionByCode(sessionCode);
+    return toAmbientPlaylistDTO(await this.playlists.addItem(playlistId, session.id, songId));
+  }
+
+  async removeItem(sessionCode: string, playlistId: string, itemId: string) {
+    const session = await this.ensureSessionByCode(sessionCode);
+    return toAmbientPlaylistDTO(await this.playlists.removeItem(playlistId, session.id, itemId));
+  }
+
+  private async ensureSessionByCode(sessionCode: string) {
     const session = await this.sessions.findActiveByCode(sessionCode);
+
+    if (!session) {
+      throw new Error("Session not found");
+    }
+
+    return session;
+  }
+
+  private async ensureSessionByKey(sessionKey: string) {
+    const session =
+      (await this.sessions.findActiveById(sessionKey)) ??
+      (await this.sessions.findActiveByCode(sessionKey));
 
     if (!session) {
       throw new Error("Session not found");

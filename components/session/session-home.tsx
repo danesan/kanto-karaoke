@@ -34,7 +34,7 @@ export function SessionHome() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 pb-10 pt-4 sm:px-6 sm:py-10 lg:px-8">
+    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 pb-10 pt-4 sm:px-6 sm:py-8 lg:px-8">
       <header className="kanto-topbar static -mx-5 mb-6 flex flex-col gap-5 px-5 pb-5 pt-3 sm:mb-10 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:-mx-8 lg:px-8">
         <div>
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border bg-card px-4 py-1.5 text-sm font-medium text-muted-foreground shadow-sm">
@@ -43,8 +43,7 @@ export function SessionHome() {
           </div>
           <AppLogo size="lg" className="mx-auto sm:mx-0" priority />
           <h1 className="mt-3 max-w-xl text-2xl font-black tracking-tight text-foreground sm:text-4xl">
-            Controle sua noite de karaokê com fila ao vivo, convidados e
-            moderação.
+            Controle sua noite de karaokê com fila ao vivo, convidados e moderação.
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
             Crie uma sessão, compartilhe o código e aprove músicas direto do
@@ -62,7 +61,7 @@ export function SessionHome() {
           <h2 className="mb-4 font-display text-xl font-bold">Criar sessão</h2>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Input
-              placeholder="Noite de karaoke"
+              placeholder="Noite de karaokê"
               value={sessionName}
               onChange={(event) => setSessionName(event.target.value)}
             />

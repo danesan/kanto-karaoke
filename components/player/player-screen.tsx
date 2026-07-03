@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { QrCode } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { CountdownOverlay } from "@/components/player/countdown-overlay";
+import { IdlePlayer } from "@/components/player/idle-player";
 import { IdleScreen } from "@/components/player/idle-screen";
 import { ProgressBar } from "@/components/player/progress-bar";
 import { RemainingTime } from "@/components/player/remaining-time";
@@ -89,6 +90,7 @@ export function PlayerScreen({
   const isCountdown = session.data?.playerMode === "COUNTDOWN";
   const showQrCode = session.data?.showQrCode ?? true;
   const showNextSongs = session.data?.showNextSongs ?? true;
+  const shouldPlayAmbient = !current && !isCountdown && nextSongs.length === 0 && (session.data?.idleModeEnabled ?? true);
 
   useEffect(() => {
     setProgress({ currentTime: 0, duration: 0 });
@@ -236,6 +238,8 @@ export function PlayerScreen({
                 onProgress={setProgress}
                 onEnded={() => void runPlayerEvent("/api/player/start-countdown")}
               />
+            ) : shouldPlayAmbient ? (
+              <IdlePlayer sessionId={sessionId} />
             ) : (
               <IdleScreen />
             )}

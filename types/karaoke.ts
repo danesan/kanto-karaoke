@@ -1,4 +1,4 @@
-﻿import type { ParticipantRole, QueueStatus } from "@prisma/client";
+import type { ParticipantRole, QueueStatus } from "@prisma/client";
 
 export type SongDTO = {
   id: string;
@@ -70,5 +70,19 @@ export type SessionDTO = {
   ambientPlaylistId: string | null;
 };
 
-export type SearchResultDTO = SongDTO;
+export type AmbientPlaylistItemDTO = {
+  id: string;
+  position: number;
+  song: SongDTO;
+};
 
+export type AmbientPlaylistDTO = {
+  id: string;
+  sessionId: string;
+  name: string;
+  enabled: boolean;
+  createdAt: string;
+  items: AmbientPlaylistItemDTO[];
+};
+
+export type SearchResultDTO = SongDTO;
